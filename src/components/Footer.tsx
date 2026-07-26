@@ -1,4 +1,4 @@
-import Monogram from './Monogram'
+import crestIcon from '../assets/crest-icon.png'
 
 const INSTAGRAM_LINKS = [
   { handle: '@thehouseofdilorenzo', url: 'https://instagram.com/thehouseofdilorenzo' },
@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="border-t border-ink-line bg-void-deep px-6 py-12 sm:px-10">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
         <div className="flex items-center gap-3">
-          <Monogram className="h-8 w-8 opacity-80" />
+          <img src={crestIcon} alt="" className="h-8 w-8 object-contain opacity-90" />
           <span className="font-display text-sm tracking-[0.15em] text-ivory-dim">
             HOUSE OF DI LORENZO
           </span>

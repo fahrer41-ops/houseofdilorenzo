@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Monogram from './Monogram'
+import crestIcon from '../assets/crest-icon.png'
 
 const LINKS = [
   { href: '#work', label: 'The Work' },
@@ -28,7 +28,7 @@ export default function Header() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
         <a href="#top" className="flex items-center gap-3 text-ivory">
-          <Monogram className="h-9 w-9 shrink-0" />
+          <img src={crestIcon} alt="" className="h-9 w-9 shrink-0 object-contain" />
           <span className="font-display text-lg tracking-[0.15em]">DI LORENZO</span>
         </a>
 

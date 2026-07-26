@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
+import crestIcon from '../assets/crest-icon.png'
 import heroPoster from '../assets/hero-landing-poster.jpg'
-import Monogram from './Monogram'
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -34,7 +34,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-        <Monogram className="mb-8 h-16 w-16 opacity-90" />
+        <img src={crestIcon} alt="" className="mb-8 h-20 w-20 object-contain opacity-95" />
         <p className="eyebrow mb-6">House of Di Lorenzo Productions</p>
         <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
           Art is the language <span className="gold-text italic">of the soul</span>
