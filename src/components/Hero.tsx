@@ -1,15 +1,34 @@
-import heroImage from '../assets/rise-of-empire-2.jpg'
+import { useEffect, useRef } from 'react'
+import heroPoster from '../assets/hero-landing-poster.jpg'
 import Monogram from './Monogram'
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!prefersReducedMotion) {
+      videoRef.current?.play().catch(() => {
+        // Autoplay can be blocked by the browser; the poster frame stands in fine.
+      })
+    }
+  }, [])
+
   return (
     <section id="top" className="relative flex min-h-screen items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt=""
-          className="h-full w-full object-cover object-center [animation:hero-drift_28s_ease-in-out_infinite_alternate]"
-        />
+        <video
+          ref={videoRef}
+          poster={heroPoster}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover object-center"
+        >
+          <source src="/hero-landing.webm" type="video/webm" />
+          <source src="/hero-landing.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-void/80 via-void/55 to-void" />
         <div className="absolute inset-0 bg-void/25" />
       </div>
