@@ -1,6 +1,6 @@
+import baliImage from '../assets/bali-reddress.jpg'
 import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
-import familyImage from '../assets/portfolio-family.jpg'
 import empireImage1 from '../assets/rise-of-empire-1.jpg'
 import empireImage2 from '../assets/rise-of-empire-2.jpg'
 import SectionDivider from './SectionDivider'
@@ -12,7 +12,7 @@ type Reel = {
 
 const trackOne: Reel[] = [
   { image: hospitalImage, caption: 'The hospital arc reveal' },
-  { image: familyImage, caption: 'The Bali honeymoon' },
+  { image: baliImage, caption: 'The Bali honeymoon' },
   { image: hallwayImage, caption: 'The barefoot hallway' },
 ]
 
