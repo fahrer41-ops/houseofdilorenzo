@@ -3,7 +3,11 @@ import SectionDivider from './SectionDivider'
 
 // TODO(Amanda): replace with your real inbox before launch.
 const CONTACT_EMAIL = 'hello@houseofdilorenzo.com'
-const INSTAGRAM_HANDLE = '@houseofdilorenzo'
+
+const INSTAGRAM_LINKS = [
+  { handle: '@thehouseofdilorenzo', url: 'https://instagram.com/thehouseofdilorenzo' },
+  { handle: '@amanda.dilorenzo', url: 'https://instagram.com/amanda.dilorenzo' },
+]
 
 const PROJECT_TYPES = ['Trailer', 'Social Content', 'Book Trailer', 'Other']
 
@@ -104,8 +108,21 @@ export default function Contact() {
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-gold underline underline-offset-4">
             Email me directly
           </a>{' '}
-          or find me on{' '}
-          <span className="text-gold">{INSTAGRAM_HANDLE}</span>.
+          or find me on Instagram —{' '}
+          {INSTAGRAM_LINKS.map((link, i) => (
+            <span key={link.handle}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-gold underline underline-offset-4"
+              >
+                {link.handle}
+              </a>
+              {i < INSTAGRAM_LINKS.length - 1 ? ' or ' : ''}
+            </span>
+          ))}
+          .
         </p>
       </div>
     </section>
