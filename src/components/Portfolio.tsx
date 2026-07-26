@@ -1,3 +1,4 @@
+import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
 import familyImage from '../assets/portfolio-family.jpg'
 import empireImage1 from '../assets/rise-of-empire-1.jpg'
@@ -12,7 +13,7 @@ type Reel = {
 const trackOne: Reel[] = [
   { image: hospitalImage, caption: 'The hospital arc reveal' },
   { image: familyImage, caption: 'The Bali honeymoon' },
-  { image: familyImage, caption: 'The barefoot hallway' },
+  { image: hallwayImage, caption: 'The barefoot hallway' },
 ]
 
 const trackTwo: Reel[] = [
