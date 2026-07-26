@@ -1,4 +1,5 @@
 import baliImage from '../assets/bali-reddress.jpg'
+import empireAftermath from '../assets/empire-aftermath.jpg'
 import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
 import empireImage1 from '../assets/rise-of-empire-1.jpg'
@@ -19,6 +20,7 @@ const trackOne: Reel[] = [
 const trackTwo: Reel[] = [
   { image: empireImage2, caption: 'Rise of the Empire — the standoff' },
   { image: empireImage1, caption: 'Rise of the Empire — the guardian' },
+  { image: empireAftermath, caption: 'Rise of the Empire — the aftermath' },
 ]
 
 function ReelCard({ reel }: { reel: Reel }) {
