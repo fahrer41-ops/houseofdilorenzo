@@ -3,6 +3,7 @@ import crestIcon from '../assets/crest-icon.png'
 
 const LINKS = [
   { href: '#work', label: 'The Work' },
+  { href: '#archive', label: 'The Archive' },
   { href: '#services', label: 'What I Create' },
   { href: '#pricing', label: 'Investment' },
   { href: '#about', label: 'About' },

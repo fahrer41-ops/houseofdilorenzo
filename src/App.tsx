@@ -1,4 +1,5 @@
 import About from './components/About'
+import Archive from './components/Archive'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Header from './components/Header'
@@ -17,6 +18,7 @@ function App() {
       <main>
         <Hero />
         <Portfolio />
+        <Archive />
         <Services />
         <Pricing />
         <About />

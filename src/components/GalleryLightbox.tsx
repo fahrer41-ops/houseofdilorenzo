@@ -26,9 +26,14 @@ export default function GalleryLightbox({ title, images, startIndex, onClose }: 
       onClick={onClose}
     >
       <div className="mb-4 flex w-full max-w-4xl items-center justify-between">
-        <p className="font-display text-lg text-ivory sm:text-xl">
-          {title} <span className="text-ivory-dim">· {index + 1}/{images.length}</span>
-        </p>
+        <div>
+          <p className="font-display text-lg text-ivory sm:text-xl">
+            {title} <span className="text-ivory-dim">· {index + 1}/{images.length}</span>
+          </p>
+          <p className="mt-1 font-body text-xs tracking-wide text-ivory-dim/70">
+            © House of Di Lorenzo — preview only, not for download or reuse
+          </p>
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -57,7 +62,9 @@ export default function GalleryLightbox({ title, images, startIndex, onClose }: 
         <img
           src={images[index]}
           alt=""
-          className="max-h-[75vh] max-w-full object-contain"
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          className="max-h-[75vh] max-w-full object-contain select-none"
         />
         {images.length > 1 && (
           <button
