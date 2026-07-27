@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Watermark from './Watermark'
 
 type GalleryLightboxProps = {
   title: string
@@ -59,13 +60,16 @@ export default function GalleryLightbox({ title, images, startIndex, onClose }: 
             </svg>
           </button>
         )}
-        <img
-          src={images[index]}
-          alt=""
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
-          className="max-h-[75vh] max-w-full object-contain select-none"
-        />
+        <div className="relative inline-block max-h-[75vh] max-w-full">
+          <img
+            src={images[index]}
+            alt=""
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
+            className="block max-h-[75vh] max-w-full object-contain select-none"
+          />
+          <Watermark />
+        </div>
         {images.length > 1 && (
           <button
             type="button"

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import GalleryLightbox from './GalleryLightbox'
 import MusicPlayer from './MusicPlayer'
 import SectionDivider from './SectionDivider'
+import Watermark from './Watermark'
 import { galleries } from '../lib/galleries'
 import { tracks } from '../lib/music'
 
@@ -34,6 +35,7 @@ function GalleryPreviewGrid({ slug }: { slug: string }) {
               onContextMenu={(e) => e.preventDefault()}
               className="h-full w-full select-none object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
+            <Watermark />
             {i === 7 && gallery.images.length > 8 && (
               <div className="absolute inset-0 flex items-center justify-center bg-void/70">
                 <span className="font-display text-lg text-ivory">+{gallery.images.length - 7}</span>

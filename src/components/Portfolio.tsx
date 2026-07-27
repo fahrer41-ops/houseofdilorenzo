@@ -4,7 +4,7 @@ import empireArrival from '../assets/empire-arrival.jpg'
 import empireEye from '../assets/empire-eye.jpg'
 import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
-import empireImage2 from '../assets/rise-of-empire-2.jpg'
+import empireStandoff from '../assets/empire-standoff.jpg'
 import SectionDivider from './SectionDivider'
 
 type Reel = {
@@ -20,7 +20,7 @@ const trackOne: Reel[] = [
 ]
 
 const trackTwo: Reel[] = [
-  { image: empireImage2, caption: 'Rise of the Empire — the standoff' },
+  { image: empireStandoff, caption: 'Rise of the Empire — the standoff' },
   {
     image: empireArrival,
     caption: 'Rise of the Empire — the arrival',
