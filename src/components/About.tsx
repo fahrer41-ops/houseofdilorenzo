@@ -10,11 +10,16 @@ export default function About() {
         <SectionDivider />
 
         <p className="reveal mt-8 font-body text-lg text-ivory-dim">
-          I'm a self-taught AI filmmaker based in Switzerland. What started as a way to tell
-          one story turned into a growing universe — and a deep, hands-on mastery of AI video
-          production, from character consistency to full trailer-scale storytelling. I've
-          worked with clients across five languages, and I'm certified through Higgsfield
-          Academy's AI Filmmaking Pipeline.
+          I'm a self-taught filmmaker and designer based in Switzerland. What started as a way
+          to tell one story turned into a growing universe — and a deep, hands-on mastery of
+          video production, fashion design, environment design, character consistency, and
+          full episode-scale storytelling, including cinematic soundtrack creation.
+        </p>
+
+        <p className="reveal mt-6 font-body text-lg text-ivory-dim">
+          Born into a tri-cultural family — Swiss, Latina, and Chinese — I grew up passionate
+          about learning from different cultures. I'm fluent in four languages: English,
+          Español, Deutsch, and Français.
         </p>
 
         <div className="reveal mt-10 inline-flex items-center gap-3 border border-gold-dim px-5 py-3">
