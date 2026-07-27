@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import baliImage from '../assets/bali-reddress.jpg'
 import empireAftermath from '../assets/empire-aftermath.jpg'
 import empireDuo from '../assets/empire-duo.jpg'
@@ -12,26 +13,57 @@ import SectionDivider from './SectionDivider'
 type Reel = {
   image: string
   caption: string
+  video?: string
 }
 
 const trackOne: Reel[] = [
-  { image: hospitalImage, caption: 'The hospital arc reveal' },
+  { image: hospitalImage, caption: 'The hospital arc reveal', video: '/portfolio/hospital-reveal.mp4' },
   { image: baliImage, caption: 'The Bali honeymoon' },
-  { image: hallwayImage, caption: 'Tenerezza' },
+  { image: hallwayImage, caption: 'Tenerezza', video: '/portfolio/tenerezza.mp4' },
 ]
 
 const trackTwo: Reel[] = [
   { image: empireImage2, caption: 'Rise of the Empire — the standoff' },
   { image: empireImage1, caption: 'Rise of the Empire — the guardian' },
-  { image: empireAftermath, caption: 'Rise of the Empire — the aftermath' },
-  { image: empireWarrior, caption: 'Rise of the Empire — the warrior' },
-  { image: empireDuo, caption: 'Rise of the Empire — the alliance' },
-  { image: empireEye, caption: 'Rise of the Empire — the reckoning' },
+  {
+    image: empireAftermath,
+    caption: 'Rise of the Empire — the aftermath',
+    video: '/portfolio/empire-aftermath.mp4',
+  },
+  {
+    image: empireWarrior,
+    caption: 'Rise of the Empire — the warrior',
+    video: '/portfolio/empire-warrior.mp4',
+  },
+  { image: empireDuo, caption: 'Rise of the Empire — the alliance', video: '/portfolio/empire-duo.mp4' },
+  { image: empireEye, caption: 'Rise of the Empire — the reckoning', video: '/portfolio/empire-eye.mp4' },
 ]
 
 function ReelCard({ reel }: { reel: Reel }) {
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  if (isPlaying && reel.video) {
+    return (
+      <div className="reveal is-visible relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink">
+        <video
+          src={reel.video}
+          poster={reel.image}
+          autoPlay
+          controls
+          playsInline
+          className="h-full w-full object-cover"
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="reveal group relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink">
+    <button
+      type="button"
+      onClick={() => reel.video && setIsPlaying(true)}
+      aria-label={reel.video ? `Play — ${reel.caption}` : reel.caption}
+      className={`reveal group relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink text-left ${reel.video ? 'cursor-pointer' : 'cursor-default'}`}
+    >
       <img
         src={reel.image}
         alt=""
@@ -40,13 +72,15 @@ function ReelCard({ reel }: { reel: Reel }) {
       <div className="absolute inset-0 bg-gradient-to-t from-void/90 via-void/10 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
         <span className="font-body text-sm tracking-wide text-ivory">{reel.caption}</span>
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gold-dim text-gold transition-colors group-hover:border-gold group-hover:text-gold-bright">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
+        {reel.video && (
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gold-dim text-gold transition-colors group-hover:border-gold group-hover:text-gold-bright">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        )}
       </div>
-    </div>
+    </button>
   )
 }
 
