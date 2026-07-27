@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import baliImage from '../assets/bali-reddress.jpg'
 import empireAftermath from '../assets/empire-aftermath.jpg'
+import empireArrival from '../assets/empire-arrival.jpg'
 import empireDuo from '../assets/empire-duo.jpg'
 import empireEye from '../assets/empire-eye.jpg'
 import empireWarrior from '../assets/empire-warrior.jpg'
@@ -36,6 +37,11 @@ const trackTwo: Reel[] = [
     video: '/portfolio/empire-warrior.mp4',
   },
   { image: empireDuo, caption: 'Rise of the Empire — the alliance', video: '/portfolio/empire-duo.mp4' },
+  {
+    image: empireArrival,
+    caption: 'Rise of the Empire — the arrival',
+    video: '/portfolio/empire-arrival.mp4',
+  },
   { image: empireEye, caption: 'Rise of the Empire — the reckoning', video: '/portfolio/empire-eye.mp4' },
 ]
 
@@ -123,7 +129,7 @@ export default function Portfolio() {
               Epic fantasy — Vikings, dragons, war, and quiet aftermath.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {trackTwo.map((reel, i) => (
               <ReelCard reel={reel} key={i} />
             ))}
