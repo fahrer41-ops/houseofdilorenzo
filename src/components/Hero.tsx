@@ -40,8 +40,7 @@ export default function Hero() {
           Art is the language <span className="gold-text italic">of the soul</span>
         </h1>
         <p className="mt-6 max-w-xl font-body text-lg text-ivory-dim italic">
-          Cinematic AI video production — character-consistent storytelling, built frame by
-          frame.
+          Cinematic video production — Luxury storytelling — Fantasy Worldbuilding
         </p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row">

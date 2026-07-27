@@ -29,7 +29,7 @@ export default function Contact() {
     <section id="contact" className="bg-void px-6 py-28 sm:px-10">
       <div className="mx-auto max-w-2xl">
         <div className="reveal text-center">
-          <p className="eyebrow mb-4">Let's Build Something</p>
+          <p className="eyebrow mb-4">Let's Create Something</p>
           <h2 className="font-display text-3xl text-ivory sm:text-4xl">Get in touch</h2>
           <p className="mt-5 font-body text-ivory-dim">
             Tell me about your project — book, brand, or story — and I'll get back to you with

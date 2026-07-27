@@ -1,5 +1,6 @@
 import baliImage from '../assets/bali-reddress.jpg'
 import empireAftermath from '../assets/empire-aftermath.jpg'
+import empireDuo from '../assets/empire-duo.jpg'
 import empireWarrior from '../assets/empire-warrior.jpg'
 import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
@@ -15,7 +16,7 @@ type Reel = {
 const trackOne: Reel[] = [
   { image: hospitalImage, caption: 'The hospital arc reveal' },
   { image: baliImage, caption: 'The Bali honeymoon' },
-  { image: hallwayImage, caption: 'The barefoot hallway' },
+  { image: hallwayImage, caption: 'Tenerezza' },
 ]
 
 const trackTwo: Reel[] = [
@@ -23,6 +24,7 @@ const trackTwo: Reel[] = [
   { image: empireImage1, caption: 'Rise of the Empire — the guardian' },
   { image: empireAftermath, caption: 'Rise of the Empire — the aftermath' },
   { image: empireWarrior, caption: 'Rise of the Empire — the warrior' },
+  { image: empireDuo, caption: 'Rise of the Empire — the alliance' },
 ]
 
 function ReelCard({ reel }: { reel: Reel }) {
@@ -85,7 +87,7 @@ export default function Portfolio() {
               Epic fantasy — Vikings, dragons, war, and quiet aftermath.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
             {trackTwo.map((reel, i) => (
               <ReelCard reel={reel} key={i} />
             ))}
