@@ -30,9 +30,7 @@ export default function About() {
               strokeWidth="1"
             />
           </svg>
-          <span className="font-body text-sm tracking-wide text-ivory-dim">
-            Certified · Higgsfield Academy AI Filmmaking Pipeline
-          </span>
+          <span className="font-body text-sm tracking-wide text-ivory-dim">Certified</span>
         </div>
       </div>
     </section>
