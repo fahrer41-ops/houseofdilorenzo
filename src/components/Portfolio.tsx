@@ -9,12 +9,15 @@ import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
 import empireImage1 from '../assets/rise-of-empire-1.jpg'
 import empireImage2 from '../assets/rise-of-empire-2.jpg'
+import GalleryLightbox from './GalleryLightbox'
+import { galleries } from '../lib/galleries'
 import SectionDivider from './SectionDivider'
 
 type Reel = {
   image: string
   caption: string
   video?: string
+  gallery?: string
 }
 
 const trackOne: Reel[] = [
@@ -28,8 +31,8 @@ const trackTwo: Reel[] = [
   { image: empireImage1, caption: 'Rise of the Empire — the guardian' },
   {
     image: empireAftermath,
-    caption: 'Rise of the Empire — the aftermath',
-    video: '/portfolio/empire-aftermath.mp4',
+    caption: 'Rise of the Empire — wardrobe & weapons',
+    gallery: 'wardrobe-weapons',
   },
   {
     image: empireWarrior,
@@ -45,8 +48,28 @@ const trackTwo: Reel[] = [
   { image: empireEye, caption: 'Rise of the Empire — the reckoning', video: '/portfolio/empire-eye.mp4' },
 ]
 
-function ReelCard({ reel }: { reel: Reel }) {
+function GalleryIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+    </svg>
+  )
+}
+
+function PlayIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  )
+}
+
+function ReelCard({ reel, onOpenGallery }: { reel: Reel; onOpenGallery: (slug: string) => void }) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const isClickable = Boolean(reel.video || reel.gallery)
 
   if (isPlaying && reel.video) {
     return (
@@ -66,9 +89,12 @@ function ReelCard({ reel }: { reel: Reel }) {
   return (
     <button
       type="button"
-      onClick={() => reel.video && setIsPlaying(true)}
-      aria-label={reel.video ? `Play — ${reel.caption}` : reel.caption}
-      className={`reveal group relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink text-left ${reel.video ? 'cursor-pointer' : 'cursor-default'}`}
+      onClick={() => {
+        if (reel.gallery) onOpenGallery(reel.gallery)
+        else if (reel.video) setIsPlaying(true)
+      }}
+      aria-label={isClickable ? `Open — ${reel.caption}` : reel.caption}
+      className={`reveal group relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink text-left ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
     >
       <img
         src={reel.image}
@@ -78,11 +104,9 @@ function ReelCard({ reel }: { reel: Reel }) {
       <div className="absolute inset-0 bg-gradient-to-t from-void/90 via-void/10 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4">
         <span className="font-body text-sm tracking-wide text-ivory">{reel.caption}</span>
-        {reel.video && (
+        {isClickable && (
           <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gold-dim text-gold transition-colors group-hover:border-gold group-hover:text-gold-bright">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+            {reel.gallery ? <GalleryIcon /> : <PlayIcon />}
           </span>
         )}
       </div>
@@ -91,6 +115,9 @@ function ReelCard({ reel }: { reel: Reel }) {
 }
 
 export default function Portfolio() {
+  const [openGallerySlug, setOpenGallerySlug] = useState<string | null>(null)
+  const openGallery = openGallerySlug ? galleries[openGallerySlug] : null
+
   return (
     <section id="work" className="bg-void px-6 py-28 sm:px-10">
       <div className="mx-auto max-w-6xl">
@@ -117,7 +144,7 @@ export default function Portfolio() {
           </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {trackOne.map((reel, i) => (
-              <ReelCard reel={reel} key={i} />
+              <ReelCard reel={reel} onOpenGallery={setOpenGallerySlug} key={i} />
             ))}
           </div>
         </div>
@@ -131,11 +158,20 @@ export default function Portfolio() {
           </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {trackTwo.map((reel, i) => (
-              <ReelCard reel={reel} key={i} />
+              <ReelCard reel={reel} onOpenGallery={setOpenGallerySlug} key={i} />
             ))}
           </div>
         </div>
       </div>
+
+      {openGallery && (
+        <GalleryLightbox
+          title={openGallery.title}
+          images={openGallery.images}
+          startIndex={0}
+          onClose={() => setOpenGallerySlug(null)}
+        />
+      )}
     </section>
   )
 }
