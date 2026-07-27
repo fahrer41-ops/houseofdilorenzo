@@ -18,7 +18,7 @@ type Reel = {
 
 const trackOne: Reel[] = [
   { image: hospitalImage, caption: 'The hospital arc reveal', video: '/portfolio/hospital-reveal.mp4' },
-  { image: baliImage, caption: 'The Bali honeymoon' },
+  { image: baliImage, caption: 'The Bali honeymoon', video: '/portfolio/bali-honeymoon.mp4' },
   { image: hallwayImage, caption: 'Tenerezza', video: '/portfolio/tenerezza.mp4' },
 ]
 
