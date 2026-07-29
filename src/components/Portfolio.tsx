@@ -21,16 +21,16 @@ const trackOne: Reel[] = [
 
 const trackTwo: Reel[] = [
   {
-    image: empireStandoff,
-    caption: 'Rise of the Empire — the standoff',
-    video: '/portfolio/empire-standoff.mp4',
-  },
-  {
     image: empireArrival,
     caption: 'Rise of the Empire — the arrival',
     video: '/portfolio/empire-arrival.mp4',
   },
   { image: empireEye, caption: 'Rise of the Empire — the reckoning', video: '/portfolio/empire-eye.mp4' },
+  {
+    image: empireStandoff,
+    caption: 'Rise of the Empire — the standoff',
+    video: '/portfolio/empire-standoff.mp4',
+  },
 ]
 
 function PlayIcon() {
