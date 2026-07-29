@@ -20,7 +20,11 @@ const trackOne: Reel[] = [
 ]
 
 const trackTwo: Reel[] = [
-  { image: empireStandoff, caption: 'Rise of the Empire — the standoff' },
+  {
+    image: empireStandoff,
+    caption: 'Rise of the Empire — the standoff',
+    video: '/portfolio/empire-standoff.mp4',
+  },
   {
     image: empireArrival,
     caption: 'Rise of the Empire — the arrival',
