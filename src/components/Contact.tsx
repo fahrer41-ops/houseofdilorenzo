@@ -1,8 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import SectionDivider from './SectionDivider'
 
-// TODO(Amanda): replace with your real inbox before launch.
-const CONTACT_EMAIL = 'hello@houseofdilorenzo.com'
+const CONTACT_EMAIL = 'info@houseofdilorenzo.com'
 
 const INSTAGRAM_LINKS = [
   { handle: '@thehouseofdilorenzo', url: 'https://instagram.com/thehouseofdilorenzo' },
