@@ -6,6 +6,7 @@ import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
 import empireStandoff from '../assets/empire-standoff.jpg'
 import patreonTrailer1 from '../assets/patreon-trailer-1.jpg'
+import patreonTrailer2 from '../assets/patreon-trailer-2.jpg'
 import SectionDivider from './SectionDivider'
 
 type Reel = {
@@ -20,6 +21,12 @@ const trailers: Reel[] = [
     image: patreonTrailer1,
     caption: 'Lisandra & Astravor',
     video: '/portfolio/patreon-trailer-1.mp4',
+    landscape: true,
+  },
+  {
+    image: patreonTrailer2,
+    caption: 'Alaric & Vaelkor',
+    video: '/portfolio/patreon-trailer-2.mp4',
     landscape: true,
   },
 ]
