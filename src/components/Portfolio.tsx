@@ -5,13 +5,24 @@ import empireEye from '../assets/empire-eye.jpg'
 import hallwayImage from '../assets/hallway-barefoot.jpg'
 import hospitalImage from '../assets/hospital-reveal.jpg'
 import empireStandoff from '../assets/empire-standoff.jpg'
+import patreonTrailer1 from '../assets/patreon-trailer-1.jpg'
 import SectionDivider from './SectionDivider'
 
 type Reel = {
   image: string
   caption: string
   video?: string
+  landscape?: boolean
 }
+
+const trailers: Reel[] = [
+  {
+    image: patreonTrailer1,
+    caption: 'Lisandra & Astravor',
+    video: '/portfolio/patreon-trailer-1.mp4',
+    landscape: true,
+  },
+]
 
 const trackOne: Reel[] = [
   { image: hospitalImage, caption: 'The hospital arc reveal', video: '/portfolio/hospital-reveal.mp4' },
@@ -44,9 +55,11 @@ function PlayIcon() {
 function ReelCard({ reel }: { reel: Reel }) {
   const [isPlaying, setIsPlaying] = useState(false)
 
+  const aspectClass = reel.landscape ? 'aspect-video' : 'aspect-[9/16]'
+
   if (isPlaying && reel.video) {
     return (
-      <div className="reveal is-visible relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink">
+      <div className={`reveal is-visible relative ${aspectClass} overflow-hidden border border-ink-line bg-ink`}>
         <video
           src={reel.video}
           poster={reel.image}
@@ -64,7 +77,7 @@ function ReelCard({ reel }: { reel: Reel }) {
       type="button"
       onClick={() => reel.video && setIsPlaying(true)}
       aria-label={reel.video ? `Play — ${reel.caption}` : reel.caption}
-      className={`reveal group relative aspect-[9/16] overflow-hidden border border-ink-line bg-ink text-left ${reel.video ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`reveal group relative ${aspectClass} overflow-hidden border border-ink-line bg-ink text-left ${reel.video ? 'cursor-pointer' : 'cursor-default'}`}
     >
       <img
         src={reel.image}
@@ -125,6 +138,20 @@ export default function Portfolio() {
           </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {trackTwo.map((reel, i) => (
+              <ReelCard reel={reel} key={i} />
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-20">
+          <div className="reveal mb-8 flex items-baseline justify-between gap-4">
+            <h3 className="font-display text-2xl text-gold-bright">Patreon Trailers</h3>
+            <p className="max-w-xs text-right font-body text-sm text-ivory-dim italic sm:max-w-sm">
+              Cinematic full-length episodes, exclusively for members.
+            </p>
+          </div>
+          <div className={`grid grid-cols-1 gap-4 ${trailers.length > 1 ? 'sm:grid-cols-2' : 'mx-auto max-w-3xl'}`}>
+            {trailers.map((reel, i) => (
               <ReelCard reel={reel} key={i} />
             ))}
           </div>
