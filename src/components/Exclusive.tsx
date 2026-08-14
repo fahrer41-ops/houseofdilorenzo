@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 
-// TODO(Amanda): replace with your real profile URLs.
-const ONLYFANS_URL = 'https://onlyfans.com/REPLACE_ME'
+const ONLYFANS_URL = 'https://onlyfans.com/thehyliangodess?rec=586003470'
+// TODO(Amanda): replace with your real Fanvue profile URL.
 const FANVUE_URL = 'https://fanvue.com/REPLACE_ME'
 
 export default function Exclusive() {
