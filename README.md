@@ -48,8 +48,17 @@ Export works two ways, chosen automatically:
 
 Either way the files drop straight into LumaFusion, iMovie and Final Cut.
 
-**Where it struggles:** mono files (there is no stereo image to read), and
-mixes where the score is also centred. Both are the notebook's job.
+On load it measures the file's stereo width — the ratio of side energy to mid
+energy — and says plainly when there is nothing to work with. Below 2% the mix
+is effectively mono and no preset will help; below 12% it is too narrow to
+expect a clean result. In both cases it points at the notebook rather than
+letting you grind through every setting for nothing.
+
+**Where it struggles, structurally:** this separates by stereo *position*, so it
+only works on speech mixed dead centre against a wide score. It has no model of
+what a voice is. Non-speech content — creature sounds, breaths, kissing, foley —
+and any narrow or mono mix are beyond it by design, not by tuning. Those are
+the notebook's job: Demucs separates by what a sound *is*, not where it sits.
 
 ## UNMIX notebook — `colab/UNMIX_iPad.ipynb`
 

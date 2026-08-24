@@ -210,7 +210,7 @@ ol li{margin-bottom:8px}
 <header>
   <span class="lbl">Stem separation · runs on this iPad</span>
   <h1>Splitroom</h1>
-  <p class="tagline">Pull the dialogue out of a one-stem mix and get music &amp; effects back as its own track. Nothing is uploaded &mdash; the audio never leaves this tab.</p>
+  <p class="tagline">Pull centred dialogue out of a one-stem mix and get music &amp; effects back as its own track. Instant, and the audio never leaves this tab.</p>\n  <p class="tagline" style="color:var(--faint);font-size:15px">It separates by <em>stereo position</em>, so it works when speech sits dead centre and the score is spread wide. For non-speech &mdash; creature sounds, breaths, foley &mdash; or a narrow mix, you need a trained model: use the Colab notebook instead.</p>
 </header>
 <hr class="rule">
 
@@ -721,19 +721,47 @@ async function captureByPlaying(file, onProgress){
    ================================================================== */
 $("#pick").addEventListener("click", ()=> $("#file").click());
 
+
+/* How much genuinely separate stereo information is in here? Centre
+   extraction has nothing to work with on a near-mono file, and CDenza-style
+   renders are often almost entirely centred. Measure it and say so, rather
+   than letting someone grind through every preset for nothing. */
+function stereoWidth(buf){
+  if(buf.numberOfChannels < 2) return 0;
+  const L = buf.getChannelData(0), R = buf.getChannelData(1);
+  const step = Math.max(1, Math.floor(buf.length / 400000));
+  let mid = 0, side = 0;
+  for(let i=0;i<buf.length;i+=step){
+    const m = (L[i]+R[i])*0.5, sd = (L[i]-R[i])*0.5;
+    mid += m*m; side += sd*sd;
+  }
+  return Math.sqrt(side / (mid + 1e-12));
+}
+
 function accept(buf, name, note){
   S.original = buf;
   S.mono = buf.numberOfChannels < 2;
   S.fileName = name.replace(/\.[^.]+$/, "") || "mix";
   S.dialogue = null;
   const msg = $("#load-msg");
-  if(S.mono){
-    say(msg, "<strong>"+name+"</strong> &mdash; "+mmss(buf.duration)+", <strong>mono</strong>. "+
-      "There's no stereo image to read, so this page can only split it by frequency, which is crude. "+
-      "For a mono file the Colab notebook is genuinely the answer.");
+  const width = S.mono ? 0 : stereoWidth(buf);
+  S.width = width;
+  const head = "<strong>"+name+"</strong> &mdash; "+mmss(buf.duration)+", "+
+    Math.round(buf.sampleRate/1000)+" kHz";
+
+  if(width < 0.02){
+    say(msg, head+", <strong>effectively mono</strong> (stereo width "+
+      (width*100).toFixed(1)+"%).<br><br>Everything sits in the same place, so there is no "+
+      "centre to separate from the sides and this page cannot help with this file. "+
+      "No preset will change that. <strong>Use the Colab notebook</strong> &mdash; it runs the "+
+      "trained Demucs model, which separates by what a sound <em>is</em> rather than where it sits.");
+  }else if(width < 0.12){
+    say(msg, head+", stereo but <strong>very narrow</strong> (width "+
+      (width*100).toFixed(0)+"%).<br><br>There is little for centre extraction to work with, so "+
+      "expect music to stay under the dialogue. Worth one try on Aggressive, but the Colab "+
+      "notebook is the reliable answer for a mix this narrow.");
   }else{
-    say(msg, "<strong>"+name+"</strong> &mdash; "+mmss(buf.duration)+", stereo, "+
-      Math.round(buf.sampleRate/1000)+" kHz. Ready."+(note||""), "calm");
+    say(msg, head+", stereo, width "+(width*100).toFixed(0)+"%. Ready."+(note||""), "calm");
   }
   $("#s-set").classList.remove("hidden");
   $("#s-out").classList.add("hidden");
