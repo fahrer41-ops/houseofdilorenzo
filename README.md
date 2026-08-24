@@ -1,5 +1,20 @@
 # Splitting a CDenza mix on an iPad
 
+> [!CAUTION]
+> **Do not add a `wrangler.toml` or `wrangler.jsonc` to this repository.**
+>
+> A Cloudflare Workers Git integration is connected to this repo and points at
+> the Worker serving **houseofdilorenzo.com** — the live company website. That
+> site was deployed separately and its source is *not* in this repo.
+>
+> Every build currently fails because there is no Wrangler config here, and
+> that failure is the only thing preventing a deploy. Adding one would let the
+> build succeed and publish this repo's contents over the live site.
+>
+> The fix is to disconnect the integration: Cloudflare dashboard →
+> Workers & Pages → `houseofdilorenzo` → Settings → Builds → Disconnect.
+> Disconnecting stops new builds only; the existing deployment keeps serving.
+
 CDenza exports a single stem — dialogue and music baked together — so muting
 one mutes everything. This repo has two ways to pull them apart, both driven
 from an iPad.
