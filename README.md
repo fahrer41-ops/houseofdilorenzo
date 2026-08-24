@@ -65,3 +65,18 @@ drag down how it treats quiet dialogue elsewhere.
 
 The original script, unchanged, for reference. It needs Python and about
 500 MB of PyTorch, so it only runs on a desktop or laptop.
+
+## Video input
+
+Safari's `decodeAudioData` refuses most containers that carry a video track, so
+Splitroom demuxes the file instead: it walks the MP4/MOV box tree, finds the
+`mp4a` track, reads the codec config out of `esds`, and re-emits the AAC samples
+as an ADTS stream, which Safari decodes happily. No transcoding, so it is fast
+and lossless.
+
+The edit list's `media_time` gives the encoder priming delay — 1024 samples on a
+typical AAC export — which is trimmed off the head. Without that the stems come
+back about 21 ms adrift of the picture.
+
+If a file has no AAC track (some `.mov` exports carry PCM), the page falls back
+to playing the video through once and capturing the audio as it goes.
