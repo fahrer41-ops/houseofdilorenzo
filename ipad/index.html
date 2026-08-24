@@ -1,0 +1,929 @@
+<title>Splitroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* Splitroom — a dubbing-stage control surface. Deliberately single-theme:
+   this is a dark-room tool, so every colour is painted explicitly and the
+   page holds on either host ground. */
+:root{
+  --ground:#191712;
+  --panel:#221F19;
+  --panel-hi:#2B2720;
+  --edge:#38332A;
+  --edge-hi:#4B4438;
+  --ink:#EFE9DD;
+  --dim:#A0978A;
+  --faint:#6E675C;
+  --dialogue:#F0A63C;
+  --dialogue-deep:#7A521A;
+  --music:#6BB8C6;
+  --music-deep:#2E5A63;
+  --alert:#DE6152;
+  --r:14px;
+  --tap:52px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
+  padding:0 20px 64px;
+}
+.wrap{max-width:860px;margin:0 auto}
+
+/* ---------- type ---------- */
+h1,h2,h3,.lbl,.btn,.seg b{font-family:"Barlow Condensed","IBM Plex Sans",sans-serif}
+h1{
+  font-size:clamp(38px,9vw,58px);
+  font-weight:700;
+  letter-spacing:.01em;
+  line-height:.95;
+  margin:0;
+  text-wrap:balance;
+}
+h2{
+  font-size:20px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);margin:0;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.lbl{
+  font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);
+}
+p{margin:0;color:var(--dim);max-width:62ch}
+strong{color:var(--ink);font-weight:600}
+
+/* ---------- header ---------- */
+header{display:flex;flex-direction:column;gap:14px;padding:44px 0 30px}
+.rule{height:1px;background:var(--edge);border:0;margin:0}
+.tagline{font-size:17px}
+
+/* ---------- panels ---------- */
+section{display:flex;flex-direction:column;gap:18px;padding:30px 0}
+.card{
+  background:var(--panel);
+  border:1px solid var(--edge);
+  border-radius:var(--r);
+  padding:22px;
+  display:flex;flex-direction:column;gap:16px;
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  appearance:none;-webkit-appearance:none;
+  min-height:var(--tap);
+  padding:0 26px;
+  border-radius:11px;
+  border:1px solid var(--edge-hi);
+  background:var(--panel-hi);
+  color:var(--ink);
+  font-size:19px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  transition:background .14s ease,border-color .14s ease,opacity .14s ease;
+}
+.btn:active{background:var(--edge)}
+.btn:focus-visible{outline:2px solid var(--dialogue);outline-offset:3px}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.primary{
+  background:var(--dialogue);border-color:var(--dialogue);color:#211803;
+}
+.btn.primary:active{background:#D8912E}
+.btn.wide{width:100%}
+
+/* ---------- file drop ---------- */
+.pick{
+  border:1px dashed var(--edge-hi);
+  border-radius:var(--r);
+  padding:34px 22px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;
+  background:var(--panel);
+}
+.pick p{text-align:center}
+input[type=file]{display:none}
+
+/* ---------- notice ---------- */
+.notice{
+  border-left:3px solid var(--alert);
+  background:rgba(222,97,82,.09);
+  padding:14px 18px;border-radius:0 10px 10px 0;
+  font-size:15px;color:var(--ink);
+}
+.notice.calm{border-left-color:var(--music);background:rgba(107,184,198,.08)}
+
+/* ---------- waveform ---------- */
+.scope{
+  position:relative;
+  background:#100F0B;
+  border:1px solid var(--edge);
+  border-radius:var(--r);
+  overflow:hidden;
+  touch-action:none;
+}
+canvas{display:block;width:100%;height:150px}
+.head{
+  position:absolute;top:0;bottom:0;width:2px;background:var(--ink);
+  left:0;pointer-events:none;opacity:.85;
+}
+
+/* ---------- transport ---------- */
+.transport{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.time{font-size:17px;color:var(--dim)}
+.time b{color:var(--ink);font-weight:500}
+
+/* ---------- stem channels ---------- */
+.strips{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:620px){.strips{grid-template-columns:1fr}}
+.strip{
+  border:1px solid var(--edge);border-radius:var(--r);
+  background:var(--panel);
+  padding:20px;display:flex;flex-direction:column;gap:14px;
+  transition:border-color .18s ease,opacity .18s ease;
+}
+.strip.off{opacity:.4}
+.strip[data-stem=dialogue]{border-top:3px solid var(--dialogue)}
+.strip[data-stem=music]{border-top:3px solid var(--music)}
+.strip h3{
+  margin:0;font-size:26px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+}
+.strip[data-stem=dialogue] h3{color:var(--dialogue)}
+.strip[data-stem=music] h3{color:var(--music)}
+.strip .sub{font-size:14px;color:var(--faint);margin-top:-8px}
+.meter{height:8px;border-radius:4px;background:#100F0B;overflow:hidden}
+.meter i{display:block;height:100%;width:0;transition:width .06s linear}
+.strip[data-stem=dialogue] .meter i{background:var(--dialogue)}
+.strip[data-stem=music] .meter i{background:var(--music)}
+
+/* ---------- segmented control ---------- */
+.seg{display:flex;border:1px solid var(--edge-hi);border-radius:11px;overflow:hidden}
+.seg button{
+  flex:1;appearance:none;-webkit-appearance:none;border:0;
+  background:var(--panel-hi);color:var(--dim);
+  min-height:var(--tap);padding:0 12px;cursor:pointer;
+  font-family:"Barlow Condensed",sans-serif;
+  font-size:18px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  border-right:1px solid var(--edge-hi);
+}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--edge);color:var(--ink)}
+.seg button:focus-visible{outline:2px solid var(--dialogue);outline-offset:-2px}
+
+/* ---------- sliders ---------- */
+.knob{display:flex;flex-direction:column;gap:8px}
+.knob .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.knob .val{font-size:15px;color:var(--ink)}
+.knob .hint{font-size:14px;color:var(--faint);line-height:1.45}
+input[type=range]{
+  appearance:none;-webkit-appearance:none;width:100%;height:34px;background:transparent;margin:0;
+}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:3px;background:var(--edge)}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:30px;height:30px;border-radius:50%;
+  background:var(--ink);border:0;margin-top:-12.5px;
+}
+input[type=range]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--dialogue);outline-offset:2px}
+
+/* ---------- progress ---------- */
+.bar{height:6px;border-radius:3px;background:var(--edge);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--dialogue);transition:width .2s ease}
+.bar.cool i{background:var(--music)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:620px){.grid2{grid-template-columns:1fr}}
+.hidden{display:none !important}
+.foot{padding:36px 0 0;font-size:15px}
+.foot a{color:var(--music)}
+ol{color:var(--dim);padding-left:22px;margin:0;max-width:62ch}
+ol li{margin-bottom:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="lbl">Stem separation · runs on this iPad</span>
+  <h1>Splitroom</h1>
+  <p class="tagline">Pull the dialogue out of a one-stem mix and get music &amp; effects back as its own track. Nothing is uploaded &mdash; the audio never leaves this tab.</p>
+</header>
+<hr class="rule">
+
+<!-- ============ 1. LOAD ============ -->
+<section id="s-load">
+  <h2>1 · Load the mix</h2>
+  <div class="pick">
+    <p>Audio or video &mdash; <span class="mono">wav, mp3, m4a, mp4, mov</span>. Up to six minutes.</p>
+    <button class="btn primary" id="pick">Choose file</button>
+    <input type="file" id="file" accept="audio/*,video/*">
+  </div>
+  <div id="load-msg"></div>
+</section>
+
+<!-- ============ 2. SETTINGS + SPLIT ============ -->
+<section id="s-set" class="hidden">
+  <hr class="rule">
+  <h2>2 · Set the split</h2>
+
+  <div class="card">
+    <div class="knob">
+      <span class="lbl">Character</span>
+      <div class="seg" id="mode" role="group" aria-label="Split character">
+        <button data-mode="wide" aria-pressed="false">Gentle</button>
+        <button data-mode="balanced" aria-pressed="true">Balanced</button>
+        <button data-mode="tight" aria-pressed="false">Aggressive</button>
+      </div>
+      <span class="hint" id="mode-hint">Balanced &mdash; the right starting point. Try the others if a word gets swallowed, or if music is leaking into the dialogue.</span>
+    </div>
+
+    <div class="knob">
+      <div class="row">
+        <span class="lbl">Centre width</span>
+        <span class="val mono" id="v-width">45</span>
+      </div>
+      <input type="range" id="width" min="8" max="95" value="45" aria-label="Centre width">
+      <span class="hint">How far off-centre a sound can sit and still count as dialogue. Raise it if the voice sounds thin; lower it if the score bleeds through.</span>
+    </div>
+
+    <div class="knob">
+      <div class="row">
+        <span class="lbl">Voice focus</span>
+        <span class="val mono" id="v-focus">45</span>
+      </div>
+      <input type="range" id="focus" min="0" max="100" value="45" aria-label="Voice focus">
+      <span class="hint">Weights the split toward speech frequencies. High values reject centred bass and cymbals but can dull consonants.</span>
+    </div>
+  </div>
+
+  <button class="btn primary wide" id="run">Split</button>
+  <div class="bar hidden" id="prog"><i></i></div>
+  <p id="prog-txt" class="mono hidden" style="font-size:15px"></p>
+</section>
+
+<!-- ============ 3. RESULT ============ -->
+<section id="s-out" class="hidden">
+  <hr class="rule">
+  <h2>3 · Listen</h2>
+
+  <div class="scope">
+    <canvas id="wave" width="1720" height="300"></canvas>
+    <div class="head" id="head"></div>
+  </div>
+
+  <div class="transport">
+    <button class="btn" id="play">Play</button>
+    <span class="time mono"><b id="t-now">0:00</b> / <span id="t-end">0:00</span></span>
+  </div>
+
+  <div class="strips">
+    <div class="strip" data-stem="dialogue" id="strip-d">
+      <h3>Dialogue</h3>
+      <span class="sub">Centred voice</span>
+      <div class="meter"><i id="m-d"></i></div>
+      <button class="btn" data-toggle="dialogue" aria-pressed="true">On</button>
+    </div>
+    <div class="strip" data-stem="music" id="strip-m">
+      <h3>Music &amp; FX</h3>
+      <span class="sub">Everything else</span>
+      <div class="meter"><i id="m-m"></i></div>
+      <button class="btn" data-toggle="music" aria-pressed="true">On</button>
+    </div>
+  </div>
+
+  <p>Mute one to check the other. The two stems always add back up to your original mix exactly &mdash; nothing is lost between them, so you can rebalance in your editor instead of choosing.</p>
+
+  <button class="btn wide" id="again">Adjust and split again</button>
+</section>
+
+<!-- ============ 4. BOUNCE ============ -->
+<section id="s-save" class="hidden">
+  <hr class="rule">
+  <h2>4 · Save to your iPad</h2>
+  <div id="save-note"></div>
+  <div class="card">
+    <p>Both stems record in a single pass, so this takes exactly as long as the clip plays. Keep this tab in front and the screen on. You'll be asked to confirm each file.</p>
+    <button class="btn primary wide" id="bounce">Bounce both stems</button>
+    <div class="bar cool hidden" id="bprog"><i></i></div>
+    <p id="bounce-txt" class="mono hidden" style="font-size:15px"></p>
+  </div>
+</section>
+
+<section>
+  <hr class="rule">
+  <h2>When this isn't enough</h2>
+  <p>This works by finding what sits dead centre in the stereo image, which is where dialogue almost always lives. It is instant and private, but it is arithmetic, not a trained model &mdash; if your music is also centred, or the file is mono, it can only do so much.</p>
+  <p style="margin-top:14px">For those, use the <strong>Colab notebook</strong> in this repo. It runs the real Demucs model on Google's GPUs and you drive it from Safari, same as this page.</p>
+</section>
+
+<p class="foot">Splitroom &middot; processing happens on-device via Web Audio.</p>
+</div>
+
+<script>
+"use strict";
+
+/* ==================================================================
+   FFT — iterative radix-2, decimation in time.
+   ================================================================== */
+function FFT(n){
+  this.n = n;
+  this.levels = Math.round(Math.log2(n));
+  this.cos = new Float64Array(n>>1);
+  this.sin = new Float64Array(n>>1);
+  for(let i=0;i<(n>>1);i++){
+    this.cos[i] = Math.cos(2*Math.PI*i/n);
+    this.sin[i] = Math.sin(2*Math.PI*i/n);
+  }
+  this.rev = new Uint32Array(n);
+  for(let i=0;i<n;i++){
+    let x=i, r=0;
+    for(let j=0;j<this.levels;j++){ r=(r<<1)|(x&1); x>>=1; }
+    this.rev[i]=r>>>0;
+  }
+}
+FFT.prototype.forward = function(re,im){
+  const n=this.n, rev=this.rev, C=this.cos, S=this.sin;
+  for(let i=0;i<n;i++){
+    const j=rev[i];
+    if(j>i){ let t=re[i];re[i]=re[j];re[j]=t; t=im[i];im[i]=im[j];im[j]=t; }
+  }
+  for(let size=2;size<=n;size<<=1){
+    const half=size>>1, step=n/size;
+    for(let i=0;i<n;i+=size){
+      for(let j=i,k=0;j<i+half;j++,k+=step){
+        const l=j+half, c=C[k], s=S[k];
+        const tre = re[l]*c + im[l]*s;
+        const tim = im[l]*c - re[l]*s;
+        re[l]=re[j]-tre; im[l]=im[j]-tim;
+        re[j]+=tre;      im[j]+=tim;
+      }
+    }
+  }
+};
+FFT.prototype.inverse = function(re,im){
+  this.forward(im,re);
+  const n=this.n;
+  for(let i=0;i<n;i++){ re[i]/=n; im[i]/=n; }
+};
+
+/* ==================================================================
+   State
+   ================================================================== */
+const N = 4096, HOP = 1024;
+const MAX_SECONDS = 6*60;
+
+const S = {
+  ctx:null, original:null, dialogue:null,
+  fileName:"mix", mono:false,
+  playing:false, startedAt:0, offset:0,
+  nodes:null, mode:"balanced",
+  gains:{dialogue:1, music:1},
+  downloads:undefined,
+};
+
+const $ = s => document.querySelector(s);
+const clamp = (v,a,b) => v<a?a:(v>b?b:v);
+function smoothstep(a,b,x){
+  if(b<=a) return x>=b?1:0;
+  const t = clamp((x-a)/(b-a),0,1);
+  return t*t*(3-2*t);
+}
+function mmss(s){
+  s = Math.max(0,s|0);
+  return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+}
+function say(el, text, kind){
+  el.innerHTML = text ? '<div class="notice'+(kind==="calm"?" calm":"")+'">'+text+'</div>' : "";
+}
+const breathe = () => new Promise(r=>setTimeout(r,0));
+
+/* ==================================================================
+   1 · Load
+   ================================================================== */
+$("#pick").addEventListener("click", ()=> $("#file").click());
+$("#file").addEventListener("change", async (e)=>{
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
+  const msg = $("#load-msg");
+  say(msg, "Reading <strong>"+f.name+"</strong>&hellip;", "calm");
+  stop();
+
+  try{
+    if(!S.ctx) S.ctx = new (window.AudioContext||window.webkitAudioContext)();
+    if(S.ctx.state === "suspended") await S.ctx.resume();
+
+    const bytes = await f.arrayBuffer();
+    let buf;
+    try{
+      buf = await S.ctx.decodeAudioData(bytes);
+    }catch(err){
+      say(msg, "Safari couldn't read the audio in <strong>"+f.name+"</strong>. Export it as WAV or M4A and try again &mdash; or use the Colab notebook, which reads anything.");
+      return;
+    }
+
+    if(buf.duration > MAX_SECONDS){
+      say(msg, "That file is "+mmss(buf.duration)+" long. This page tops out at six minutes so an iPad doesn't run out of memory. Split it scene by scene, or use the Colab notebook for the whole thing.");
+      return;
+    }
+
+    S.original = buf;
+    S.mono = buf.numberOfChannels < 2;
+    S.fileName = f.name.replace(/\.[^.]+$/, "") || "mix";
+    S.dialogue = null;
+
+    if(S.mono){
+      say(msg, "<strong>"+f.name+"</strong> &mdash; "+mmss(buf.duration)+", mono. There's no stereo image to read, so this page can only split it by frequency, which is crude. For a mono file the Colab notebook is genuinely the answer.");
+    }else{
+      say(msg, "<strong>"+f.name+"</strong> &mdash; "+mmss(buf.duration)+", stereo, "+Math.round(buf.sampleRate/1000)+" kHz. Ready.", "calm");
+    }
+    $("#s-set").classList.remove("hidden");
+    $("#s-out").classList.add("hidden");
+    $("#s-save").classList.add("hidden");
+    $("#s-set").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(err){
+    say(msg, "Something went wrong reading that file: "+(err && err.message ? err.message : err));
+  }
+});
+
+/* ==================================================================
+   2 · Controls
+   ================================================================== */
+const PRESETS = {
+  wide:     {width:72, focus:22, power:0.75,
+             hint:"Gentle &mdash; keeps more of the voice, at the cost of some music leaking in with it. Use when dialogue is being chewed up."},
+  balanced: {width:45, focus:45, power:1.15,
+             hint:"Balanced &mdash; the right starting point. Try the others if a word gets swallowed, or if music is leaking into the dialogue."},
+  tight:    {width:24, focus:78, power:1.7,
+             hint:"Aggressive &mdash; strips the music hard. Cleanest music stem, but the dialogue can start to sound processed."}
+};
+
+document.querySelectorAll("#mode button").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    S.mode = b.dataset.mode;
+    document.querySelectorAll("#mode button").forEach(o=>
+      o.setAttribute("aria-pressed", String(o===b)));
+    const p = PRESETS[S.mode];
+    $("#width").value = p.width; $("#v-width").textContent = p.width;
+    $("#focus").value = p.focus; $("#v-focus").textContent = p.focus;
+    $("#mode-hint").innerHTML = p.hint;
+  });
+});
+$("#width").addEventListener("input", e=> $("#v-width").textContent = e.target.value);
+$("#focus").addEventListener("input", e=> $("#v-focus").textContent = e.target.value);
+
+/* ==================================================================
+   Separation
+   ================================================================== */
+async function separate(onProgress){
+  const src = S.original;
+  const len = src.length, sr = src.sampleRate;
+  const L = src.getChannelData(0);
+  const R = S.mono ? L : src.getChannelData(1);
+
+  const out = S.ctx.createBuffer(2, len, sr);
+  const oL = out.getChannelData(0), oR = out.getChannelData(1);
+
+  const width = parseInt($("#width").value,10) / 100;
+  const focus = parseInt($("#focus").value,10) / 100;
+  const power = PRESETS[S.mode].power;
+  const lo = 1 - width;                    // similarity floor for "centred"
+
+  // analysis window (periodic Hann) and its 75%-overlap power sum
+  const w = new Float64Array(N);
+  for(let i=0;i<N;i++) w[i] = 0.5 - 0.5*Math.cos(2*Math.PI*i/N);
+  const normP = new Float64Array(HOP);
+  for(let i=0;i<N;i++) normP[i % HOP] += w[i]*w[i];
+
+  // speech-band weighting, per bin
+  const band = new Float64Array((N>>1)+1);
+  for(let k=0;k<=(N>>1);k++){
+    const f = k * sr / N;
+    const rise = smoothstep(70,150,f);
+    const fall = 1 - 0.68*smoothstep(6500,12500,f);
+    band[k] = rise*fall;
+  }
+
+  const fft = new FFT(N);
+  const re = new Float64Array(N), im = new Float64Array(N);
+  const mask = new Float64Array((N>>1)+1);
+  const prev = new Float64Array((N>>1)+1);
+  const half = N>>1, EPS = 1e-12;
+
+  const first = -(N - HOP);
+  const frames = Math.ceil((len - first) / HOP);
+  let done = 0;
+
+  for(let t = first; t < len; t += HOP){
+    // ---- pack L into real, R into imaginary: one FFT gives both spectra
+    for(let i=0;i<N;i++){
+      const n = t + i;
+      if(n < 0 || n >= len){ re[i]=0; im[i]=0; }
+      else { const g = w[i]; re[i] = L[n]*g; im[i] = R[n]*g; }
+    }
+    fft.forward(re, im);
+
+    // ---- per-bin centre detection
+    for(let k=0;k<=half;k++){
+      const kk = (k===0 || k===half) ? k : N-k;
+      const ar = re[k], ai = im[k];
+      const br = re[kk], bi = -im[kk];
+      const Lr = (ar+br)*0.5, Li = (ai+bi)*0.5;
+      const Rr = (ai-bi)*0.5, Ri = -(ar-br)*0.5;
+
+      const eL = Lr*Lr + Li*Li;
+      const eR = Rr*Rr + Ri*Ri;
+      const dot = Lr*Rr + Li*Ri;
+      // 1 when the two channels carry the same thing in phase, 0 when
+      // uncorrelated or hard-panned, negative when out of phase.
+      const sim = clamp(2*dot / (eL + eR + EPS), 0, 1);
+
+      let m = smoothstep(lo, 1, sim);
+      if(power !== 1) m = Math.pow(m, power);
+      if(S.mono) m = 1;                       // no stereo cue to use
+      m *= (1 - focus) + focus*band[k];
+      mask[k] = m;
+    }
+
+    // ---- 3-tap spectral smoothing, then fast-attack / slow-release in time
+    let a = mask[0], b = mask[0];
+    for(let k=0;k<=half;k++){
+      const c = k<half ? mask[k+1] : mask[half];
+      let m = (a + 2*b + c) * 0.25;
+      a = b; b = c;
+      m = m > prev[k] ? m : prev[k]*0.62 + m*0.38;
+      prev[k] = m;
+      mask[k] = m;
+    }
+
+    // ---- a real, symmetric mask scales both packed spectra at once
+    for(let k=0;k<=half;k++){
+      const m = mask[k];
+      re[k]*=m; im[k]*=m;
+      if(k>0 && k<half){ const j=N-k; re[j]*=m; im[j]*=m; }
+    }
+
+    fft.inverse(re, im);
+
+    // ---- overlap-add, with the window applied a second time
+    for(let i=0;i<N;i++){
+      const n = t + i;
+      if(n < 0 || n >= len) continue;
+      const g = w[i];
+      oL[n] += re[i]*g;
+      oR[n] += im[i]*g;
+    }
+
+    done++;
+    if((done & 63) === 0){
+      onProgress(done/frames);
+      await breathe();
+    }
+  }
+
+  for(let n=0;n<len;n++){
+    const d = normP[n % HOP] || 1;
+    oL[n] /= d; oR[n] /= d;
+  }
+
+  onProgress(1);
+  return out;
+}
+
+$("#run").addEventListener("click", async ()=>{
+  if(!S.original) return;
+  stop();
+  const btn = $("#run"), bar = $("#prog"), txt = $("#prog-txt");
+  btn.disabled = true; btn.textContent = "Splitting";
+  bar.classList.remove("hidden"); txt.classList.remove("hidden");
+  const t0 = performance.now();
+
+  try{
+    S.dialogue = await separate(p=>{
+      bar.firstElementChild.style.width = (p*100).toFixed(1)+"%";
+      txt.textContent = Math.round(p*100)+"%";
+    });
+    txt.textContent = "Done in "+((performance.now()-t0)/1000).toFixed(1)+"s";
+    drawWave();
+    $("#t-end").textContent = mmss(S.original.duration);
+    $("#s-out").classList.remove("hidden");
+    $("#s-save").classList.remove("hidden");
+    await setupSave();
+    $("#s-out").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(err){
+    txt.textContent = "Split failed: "+(err && err.message ? err.message : err);
+  }finally{
+    btn.disabled = false; btn.textContent = "Split again";
+    bar.classList.add("hidden");
+  }
+});
+
+$("#again").addEventListener("click", ()=>
+  $("#s-set").scrollIntoView({behavior:"smooth", block:"start"}));
+
+/* ==================================================================
+   3 · Waveform
+   ================================================================== */
+function peaks(buf, buckets){
+  const ch = buf.numberOfChannels;
+  const a = buf.getChannelData(0);
+  const b = ch>1 ? buf.getChannelData(1) : a;
+  const step = Math.max(1, Math.floor(buf.length/buckets));
+  const out = new Float32Array(buckets);
+  for(let i=0;i<buckets;i++){
+    let hi = 0;
+    const s = i*step, e = Math.min(buf.length, s+step);
+    for(let n=s;n<e;n+=2){
+      const v = Math.abs(a[n] + b[n]) * 0.5;
+      if(v>hi) hi=v;
+    }
+    out[i]=hi;
+  }
+  return out;
+}
+
+function drawWave(){
+  const c = $("#wave"), g = c.getContext("2d");
+  const W = c.width, H = c.height, mid = H/2;
+  const buckets = W>>1;
+  const full = peaks(S.original, buckets);
+  const dia  = peaks(S.dialogue, buckets);
+
+  g.fillStyle = "#100F0B"; g.fillRect(0,0,W,H);
+  g.strokeStyle = "#2B2720"; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(0,mid); g.lineTo(W,mid); g.stroke();
+
+  const bw = W/buckets;
+  for(let i=0;i<buckets;i++){
+    const x = i*bw;
+    const hFull = Math.max(1, full[i]*mid*0.95);
+    g.fillStyle = "#3C5B61";                      // music & fx (the remainder)
+    g.fillRect(x, mid-hFull, bw+0.6, hFull*2);
+  }
+  for(let i=0;i<buckets;i++){
+    const x = i*bw;
+    const hD = Math.max(0, dia[i]*mid*0.95);
+    if(hD < 0.6) continue;
+    g.fillStyle = "#F0A63C";                      // dialogue sitting inside it
+    g.fillRect(x, mid-hD, bw+0.6, hD*2);
+  }
+}
+
+/* ==================================================================
+   Playback graph
+   music bus = original + (-1 x dialogue).  Exact, and one buffer lighter.
+   ================================================================== */
+function buildGraph(){
+  const ctx = S.ctx;
+  const srcO = ctx.createBufferSource(); srcO.buffer = S.original;
+  const srcD = ctx.createBufferSource(); srcD.buffer = S.dialogue;
+
+  const invert = ctx.createGain(); invert.gain.value = -1;
+  const musicBus = ctx.createGain();
+  const diaBus   = ctx.createGain();
+
+  srcO.connect(musicBus);
+  srcD.connect(invert); invert.connect(musicBus);
+  srcD.connect(diaBus);
+
+  const gM = ctx.createGain(); gM.gain.value = S.gains.music;
+  const gD = ctx.createGain(); gD.gain.value = S.gains.dialogue;
+  musicBus.connect(gM); diaBus.connect(gD);
+
+  const anM = ctx.createAnalyser(); anM.fftSize = 1024;
+  const anD = ctx.createAnalyser(); anD.fftSize = 1024;
+  musicBus.connect(anM); diaBus.connect(anD);
+
+  const master = ctx.createGain();
+  gM.connect(master); gD.connect(master);
+
+  return {srcO, srcD, musicBus, diaBus, gM, gD, anM, anD, master};
+}
+
+function play(from){
+  const ctx = S.ctx;
+  const n = buildGraph();
+  n.master.connect(ctx.destination);
+  const when = ctx.currentTime + 0.06;
+  n.srcO.start(when, from);
+  n.srcD.start(when, from);
+  n.srcO.onended = ()=>{ if(S.playing) stop(); };
+  S.nodes = n; S.playing = true; S.startedAt = when; S.offset = from;
+  $("#play").textContent = "Pause";
+  tick();
+}
+
+function stop(){
+  if(S.nodes){
+    try{ S.nodes.srcO.onended = null; S.nodes.srcO.stop(); S.nodes.srcD.stop(); }catch(e){}
+    try{ S.nodes.master.disconnect(); }catch(e){}
+  }
+  S.nodes = null; S.playing = false;
+  const p = $("#play"); if(p) p.textContent = "Play";
+  $("#m-d").style.width = "0%"; $("#m-m").style.width = "0%";
+}
+
+$("#play").addEventListener("click", async ()=>{
+  if(!S.dialogue) return;
+  if(S.ctx.state === "suspended") await S.ctx.resume();
+  if(S.playing){
+    S.offset = playhead(); stop();
+    $("#head").style.left = (S.offset/S.original.duration*100)+"%";
+  }else{
+    play(S.offset >= S.original.duration - 0.05 ? 0 : S.offset);
+  }
+});
+
+function playhead(){
+  if(!S.playing) return S.offset;
+  return clamp(S.offset + (S.ctx.currentTime - S.startedAt), 0, S.original.duration);
+}
+
+const lvl = {d:0, m:0};
+function rms(an, tmp){
+  an.getByteTimeDomainData(tmp);
+  let s = 0;
+  for(let i=0;i<tmp.length;i++){ const v=(tmp[i]-128)/128; s += v*v; }
+  return Math.sqrt(s/tmp.length);
+}
+let tmpBuf = new Uint8Array(1024);
+function tick(){
+  if(!S.playing) return;
+  const t = playhead();
+  $("#t-now").textContent = mmss(t);
+  $("#head").style.left = (t/S.original.duration*100)+"%";
+  if(S.nodes){
+    lvl.d = Math.max(rms(S.nodes.anD, tmpBuf), lvl.d*0.86);
+    lvl.m = Math.max(rms(S.nodes.anM, tmpBuf), lvl.m*0.86);
+    $("#m-d").style.width = clamp(lvl.d*260,0,100)+"%";
+    $("#m-m").style.width = clamp(lvl.m*260,0,100)+"%";
+  }
+  requestAnimationFrame(tick);
+}
+
+// scrub
+$(".scope").addEventListener("pointerdown", e=>{
+  if(!S.dialogue) return;
+  const r = e.currentTarget.getBoundingClientRect();
+  const f = clamp((e.clientX - r.left)/r.width, 0, 1);
+  const was = S.playing;
+  stop();
+  S.offset = f * S.original.duration;
+  $("#head").style.left = (f*100)+"%";
+  $("#t-now").textContent = mmss(S.offset);
+  if(was) play(S.offset);
+});
+
+// stem mute
+document.querySelectorAll("[data-toggle]").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    const stem = b.dataset.toggle;
+    const on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "On" : "Muted";
+    S.gains[stem] = on ? 1 : 0;
+    document.querySelector('.strip[data-stem="'+stem+'"]').classList.toggle("off", !on);
+    if(S.nodes){
+      const g = stem==="dialogue" ? S.nodes.gD : S.nodes.gM;
+      g.gain.setTargetAtTime(on?1:0, S.ctx.currentTime, 0.01);
+    }
+  });
+});
+
+/* ==================================================================
+   4 · Bounce — one realtime pass, both stems recorded together
+   ================================================================== */
+function pickMime(){
+  if(typeof MediaRecorder === "undefined") return null;
+  const tries = ["audio/mp4", "audio/mp4;codecs=mp4a.40.2",
+                 "audio/webm;codecs=opus", "audio/webm"];
+  for(const m of tries){
+    try{ if(MediaRecorder.isTypeSupported(m)) return m; }catch(e){}
+  }
+  return null;
+}
+
+async function setupSave(){
+  const note = $("#save-note"), btn = $("#bounce");
+  if(S.downloads === undefined){
+    try{ S.downloads = (window.claude && window.claude.use)
+      ? await window.claude.use("downloads") : null; }
+    catch(e){ S.downloads = null; }
+  }
+  const mime = pickMime();
+
+  if(!S.downloads){
+    btn.disabled = true;
+    say(note, "This view can't save files to your device. Open the page from your own Artifacts list rather than a preview, or use the Colab notebook to get the stems.");
+    return;
+  }
+  if(!mime){
+    btn.disabled = true;
+    say(note, "This browser can't record audio out. Safari on iPadOS 16 or newer can &mdash; check for a software update, or use the Colab notebook.");
+    return;
+  }
+  btn.disabled = false;
+  const secs = S.original.duration;
+  const est = secs * 192000 / 8 / 1e6;
+  if(est > 15){
+    say(note, "At "+mmss(secs)+" each stem lands around "+est.toFixed(0)+" MB, over the 16 MB save limit. Bounce a shorter section, or use the Colab notebook.");
+  }else{
+    say(note, "Bounce takes "+mmss(secs)+" &mdash; the length of the clip. Roughly "+est.toFixed(1)+" MB per stem.", "calm");
+  }
+}
+
+$("#bounce").addEventListener("click", async ()=>{
+  const btn = $("#bounce"), bar = $("#bprog"), txt = $("#bounce-txt");
+  const mime = pickMime();
+  if(!mime || !S.downloads) return;
+  const ext = mime.indexOf("mp4") >= 0 ? "mp4" : "webm";
+
+  stop();
+  btn.disabled = true; btn.textContent = "Bouncing";
+  bar.classList.remove("hidden"); txt.classList.remove("hidden");
+
+  let wake = null;
+  try{ if(navigator.wakeLock) wake = await navigator.wakeLock.request("screen"); }catch(e){}
+
+  try{
+    if(S.ctx.state === "suspended") await S.ctx.resume();
+    const ctx = S.ctx;
+    const n = buildGraph();
+    n.master.connect(ctx.destination);           // monitor while it runs
+
+    const destD = ctx.createMediaStreamDestination();
+    const destM = ctx.createMediaStreamDestination();
+    n.diaBus.connect(destD);
+    n.musicBus.connect(destM);
+
+    const opts = {mimeType:mime, audioBitsPerSecond:192000};
+    const recD = new MediaRecorder(destD.stream, opts);
+    const recM = new MediaRecorder(destM.stream, opts);
+    const cD = [], cM = [];
+    recD.ondataavailable = e => { if(e.data.size) cD.push(e.data); };
+    recM.ondataavailable = e => { if(e.data.size) cM.push(e.data); };
+
+    const dur = S.original.duration;
+    const finished = new Promise(res=>{
+      let left = 2;
+      recD.onstop = ()=>{ if(--left===0) res(); };
+      recM.onstop = ()=>{ if(--left===0) res(); };
+    });
+
+    recD.start(); recM.start();
+    const when = ctx.currentTime + 0.08;
+    n.srcO.start(when, 0); n.srcD.start(when, 0);
+    S.nodes = n; S.playing = false;
+
+    const t0 = ctx.currentTime;
+    await new Promise(res=>{
+      const step = ()=>{
+        const p = clamp((ctx.currentTime - t0)/(dur + 0.08), 0, 1);
+        bar.firstElementChild.style.width = (p*100).toFixed(1)+"%";
+        txt.textContent = mmss(dur*(1-p))+" left";
+        if(p >= 1) res(); else requestAnimationFrame(step);
+      };
+      step();
+    });
+
+    await new Promise(r=>setTimeout(r,250));     // let the tail land
+    recD.stop(); recM.stop();
+    await finished;
+    try{ n.srcO.stop(); n.srcD.stop(); n.master.disconnect(); }catch(e){}
+    S.nodes = null;
+
+    const files = [
+      {name: S.fileName+"_DIALOGUE."+ext, blob: new Blob(cD, {type:mime})},
+      {name: S.fileName+"_MUSIC_FX."+ext, blob: new Blob(cM, {type:mime})}
+    ];
+
+    let saved = 0;
+    for(const f of files){
+      txt.textContent = "Saving "+f.name;
+      try{
+        await S.downloads.save({filename:f.name, data:f.blob});
+        saved++;
+      }catch(err){
+        const code = err && err.code;
+        if(code === "declined"){ txt.textContent = "Save cancelled for "+f.name; }
+        else if(code === "too_large"){
+          txt.textContent = f.name+" is over the 16 MB limit — bounce a shorter section.";
+          break;
+        }
+        else { txt.textContent = "Couldn't save "+f.name+": "+(err && err.message || code); break; }
+      }
+    }
+    if(saved === 2) txt.textContent = "Both stems saved. Look in Files › Downloads.";
+    else if(saved === 1) txt.textContent = "One stem saved. Run it again for the other.";
+  }catch(err){
+    txt.textContent = "Bounce failed: "+(err && err.message ? err.message : err);
+  }finally{
+    if(wake){ try{ await wake.release(); }catch(e){} }
+    btn.disabled = false; btn.textContent = "Bounce both stems";
+    bar.classList.add("hidden");
+  }
+});
+</script>
