@@ -402,6 +402,46 @@ function say(el, text, kind){
 const breathe = () => new Promise(r=>setTimeout(r,0));
 
 
+
+/* Every await in the load path is wrapped so a stall reports which step
+   stalled, instead of sitting on "Reading..." forever. */
+function withTimeout(promise, ms, label){
+  return new Promise((res, rej)=>{
+    let done = false;
+    const t = setTimeout(()=>{ if(!done){ done = true; rej(new Error(label)); } }, ms);
+    promise.then(
+      v=>{ if(!done){ done = true; clearTimeout(t); res(v); } },
+      e=>{ if(!done){ done = true; clearTimeout(t); rej(e); } });
+  });
+}
+
+/* Safari has shipped both the promise and the callback form of
+   decodeAudioData, and older builds only settle the callback. Take either. */
+function decode(ctx, ab){
+  return new Promise((res, rej)=>{
+    let settled = false;
+    const ok = b=>{ if(!settled){ settled = true; res(b); } };
+    const no = e=>{ if(!settled){ settled = true; rej(e || new Error("could not decode")); } };
+    try{
+      const p = ctx.decodeAudioData(ab, ok, no);
+      if(p && p.then) p.then(ok, no);
+    }catch(e){ no(e); }
+  });
+}
+
+/* FileReader rather than file.arrayBuffer(), because it reports progress —
+   a big clip off iCloud can take a while and silence looks like a freeze. */
+function readFile(file, onProgress){
+  return new Promise((res, rej)=>{
+    const fr = new FileReader();
+    fr.onprogress = e=>{ if(e.lengthComputable) onProgress(e.loaded / e.total); };
+    fr.onload  = ()=> res(fr.result);
+    fr.onerror = ()=> rej(new Error("iOS wouldn't hand over the file. If it lives in iCloud, open it once in the Files app so it downloads, then try again."));
+    fr.onabort = ()=> rej(new Error("Reading was cancelled."));
+    try{ fr.readAsArrayBuffer(file); }catch(e){ rej(e); }
+  });
+}
+
 /* ==================================================================
    MP4 / MOV -> AAC.  Safari's decodeAudioData refuses most containers
    that carry a video track, so pull the audio track out as an ADTS
@@ -577,22 +617,48 @@ function trimHead(buf, n){
 }
 
 /* Returns {buf, how} or {buf:null, why} — the caller then offers play-through. */
-async function decodeAny(file){
-  const bytes = await file.arrayBuffer();
+async function decodeAny(file, stage){
+  stage("Reading the file", 0);
+  const bytes = await withTimeout(
+    readFile(file, p=> stage("Reading the file", p)),
+    120000, "reading the file off disk took too long");
+
   const u8 = new Uint8Array(bytes);
   const isISO = u8.length > 12 &&
     String.fromCharCode(u8[4],u8[5],u8[6],u8[7]) === "ftyp";
   let why = "";
 
-  if(isISO){
+  // decodeAudioData can stall on a context iOS has not started yet, so give
+  // each attempt a deadline and fall back to an offline context, which needs
+  // no user gesture at all.
+  async function attempt(ab, label){
+    // a ticking count keeps a slow decode visibly alive rather than frozen
+    const t0 = Date.now();
+    const tick = setInterval(()=>
+      stage(label.charAt(0).toUpperCase()+label.slice(1)+" &mdash; "+
+            Math.round((Date.now()-t0)/1000)+"s", 0), 1000);
     try{
-      const t = extractAAC(u8);                     // must run before any
-      const raw = await S.ctx.decodeAudioData(t.data.buffer);   // detaching decode
+      try{
+        return await withTimeout(decode(S.ctx, ab), 30000, label+" timed out");
+      }catch(e){
+        const off = new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(2, 1024, 48000);
+        return await withTimeout(decode(off, ab), 30000, label+" timed out");
+      }
+    } finally { clearInterval(tick); }
+  }
+
+  if(isISO){
+    stage("Lifting the audio track out of the video", 0);
+    try{
+      const t = extractAAC(u8);                        // must run before any
+      const raw = await attempt(t.data.buffer, "decoding the audio track");  // detaching decode
       return {buf: trimHead(raw, t.trimStart), how: "demux"};
     }catch(e){ why = e && e.message ? e.message : String(e); }
   }
+
+  stage("Decoding the audio", 0);
   try{
-    return {buf: await S.ctx.decodeAudioData(bytes), how: "direct"};
+    return {buf: await attempt(bytes, "decoding"), how: "direct"};
   }catch(e){
     return {buf: null, why: why || (e && e.message) || "unreadable"};
   }
@@ -679,21 +745,33 @@ $("#file").addEventListener("change", async (e)=>{
   const f = e.target.files && e.target.files[0];
   if(!f) return;
   const msg = $("#load-msg");
-  say(msg, "Reading <strong>"+f.name+"</strong>&hellip;", "calm");
   stop();
 
-  try{
-    if(!S.ctx) S.ctx = new (window.AudioContext||window.webkitAudioContext)();
-    if(S.ctx.state === "suspended") await S.ctx.resume();
+  const mb = f.size / 1048576;
+  const stage = (what, frac)=>{
+    const pct = frac > 0 ? " &mdash; " + Math.round(frac*100) + "%" : "";
+    say(msg, what + pct + "<br><span class=\"mono\" style=\"font-size:14px\">" +
+      f.name + " · " + mb.toFixed(1) + " MB</span>", "calm");
+  };
+  stage("Opening", 0);
 
-    const r = await decodeAny(f);
+  try{
+    // The context is created but deliberately NOT resumed here. On iOS
+    // resume() can hang forever when the gesture has lapsed, and decoding
+    // does not need a running context — playback resumes it later.
+    if(!S.ctx) S.ctx = new (window.AudioContext||window.webkitAudioContext)();
+
+    if(mb > 600){
+      say(msg, "<strong>"+f.name+"</strong> is "+mb.toFixed(0)+" MB. That's too big to hold in Safari's memory on an iPad. Trim it to the scene you need, or use the Colab notebook, which has no limit.");
+      return;
+    }
+
+    const r = await decodeAny(f, stage);
 
     if(!r.buf){
-      // Both quick routes failed. Playing it through still gets the audio,
-      // but it needs its own tap because iOS only starts playback on a gesture.
-      say(msg, "Couldn't read the audio track directly &mdash; <span class=\"mono\">"+
-        r.why+"</span>.<br><br>Safari can still get it by playing the file through once. "+
-        "That takes as long as the clip runs.");
+      say(msg, "Couldn't read the audio &mdash; <span class=\"mono\">"+ r.why +
+        "</span>.<br><br>Safari can still get at it by playing the file through once, "+
+        "which takes as long as the clip runs.");
       const b = document.createElement("button");
       b.className = "btn wide"; b.textContent = "Extract by playing it through";
       b.style.marginTop = "14px";
@@ -707,13 +785,14 @@ $("#file").addEventListener("change", async (e)=>{
         let wake = null;
         try{ if(navigator.wakeLock) wake = await navigator.wakeLock.request("screen"); }catch(err){}
         try{
+          if(S.ctx.state === "suspended") S.ctx.resume();   // gesture is live here
           const buf = await captureByPlaying(f, p=>{
             bar.firstElementChild.style.width = (p*100).toFixed(1)+"%";
           });
           accept(buf, f.name, " Extracted by play-through.");
         }catch(err){
           say(msg, "That didn't work either: "+(err && err.message ? err.message : err)+
-            "<br><br>Use the Colab notebook &mdash; it reads any file ffmpeg can open, which is everything.");
+            "<br><br>Use the Colab notebook &mdash; it reads anything ffmpeg can open, which is everything.");
         }finally{
           if(wake){ try{ await wake.release(); }catch(err){} }
         }
@@ -728,7 +807,8 @@ $("#file").addEventListener("change", async (e)=>{
     }
     accept(r.buf, f.name, r.how === "demux" ? " Audio track lifted straight out of the video." : "");
   }catch(err){
-    say(msg, "Something went wrong reading that file: "+(err && err.message ? err.message : err));
+    say(msg, "Stopped while <strong>"+(err && err.message ? err.message : err)+"</strong>."+
+      "<br><br>Tell Claude what this says and it can be fixed. The Colab notebook is the way through in the meantime.");
   }
 });
 
@@ -879,6 +959,7 @@ async function separate(onProgress){
 $("#run").addEventListener("click", async ()=>{
   if(!S.original) return;
   stop();
+  try{ if(S.ctx.state === "suspended") S.ctx.resume(); }catch(e){}
   const btn = $("#run"), bar = $("#prog"), txt = $("#prog-txt");
   btn.disabled = true; btn.textContent = "Splitting";
   bar.classList.remove("hidden"); txt.classList.remove("hidden");
@@ -1011,7 +1092,7 @@ function stop(){
 
 $("#play").addEventListener("click", async ()=>{
   if(!S.dialogue) return;
-  if(S.ctx.state === "suspended") await S.ctx.resume();
+  try{ if(S.ctx.state === "suspended") await withTimeout(S.ctx.resume(), 3000, "audio start"); }catch(e){}
   if(S.playing){
     S.offset = playhead(); stop();
     $("#head").style.left = (S.offset/S.original.duration*100)+"%";
@@ -1201,7 +1282,7 @@ $("#bounce").addEventListener("click", async ()=>{
   try{ if(navigator.wakeLock) wake = await navigator.wakeLock.request("screen"); }catch(e){}
 
   try{
-    if(S.ctx.state === "suspended") await S.ctx.resume();
+    try{ if(S.ctx.state === "suspended") await withTimeout(S.ctx.resume(), 3000, "audio start"); }catch(e){}
     const ctx = S.ctx;
     const n = buildGraph();
     n.master.connect(ctx.destination);           // monitor while it runs
