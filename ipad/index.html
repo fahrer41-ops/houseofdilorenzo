@@ -306,7 +306,7 @@ ol li{margin-bottom:8px}
   <h2>4 · Save to your iPad</h2>
   <div id="save-note"></div>
   <div class="card">
-    <p>Both stems record in a single pass, so this takes exactly as long as the clip plays. Keep this tab in front and the screen on. You'll be asked to confirm each file.</p>
+    <p id="bounce-how">Both stems export together.</p>
     <button class="btn primary wide" id="bounce">Bounce both stems</button>
     <div class="bar cool hidden" id="bprog"><i></i></div>
     <p id="bounce-txt" class="mono hidden" style="font-size:15px"></p>
@@ -1089,30 +1089,80 @@ function pickMime(){
   return null;
 }
 
+/* ---- direct WAV export, used whenever the page is NOT inside the Artifact
+   viewer (GitHub Pages, a local file, anywhere else). No sandbox, so a plain
+   download link works: no 16 MB ceiling, no realtime pass, no re-encoding. */
+function wavBlob(dialogueStem){
+  const A = S.original, D = S.dialogue;
+  const len = Math.min(A.length, D.length), sr = A.sampleRate;
+  const ab = new ArrayBuffer(44 + len*4);
+  const dv = new DataView(ab);
+  const tag = (o,str)=>{ for(let i=0;i<str.length;i++) dv.setUint8(o+i, str.charCodeAt(i)); };
+  tag(0,"RIFF"); dv.setUint32(4, 36 + len*4, true); tag(8,"WAVE");
+  tag(12,"fmt "); dv.setUint32(16,16,true); dv.setUint16(20,1,true);
+  dv.setUint16(22,2,true); dv.setUint32(24,sr,true);
+  dv.setUint32(28,sr*4,true); dv.setUint16(32,4,true); dv.setUint16(34,16,true);
+  tag(36,"data"); dv.setUint32(40, len*4, true);
+
+  const aL = A.getChannelData(0), aR = A.getChannelData(A.numberOfChannels>1?1:0);
+  const dL = D.getChannelData(0), dR = D.getChannelData(1);
+  let o = 44;
+  for(let i=0;i<len;i++){
+    let l, r;
+    if(dialogueStem){ l = dL[i];        r = dR[i]; }
+    else            { l = aL[i]-dL[i];  r = aR[i]-dR[i]; }   // music = original - dialogue
+    l = l < -1 ? -1 : l > 1 ? 1 : l;
+    r = r < -1 ? -1 : r > 1 ? 1 : r;
+    dv.setInt16(o, Math.round(l*32767), true); o += 2;
+    dv.setInt16(o, Math.round(r*32767), true); o += 2;
+  }
+  return new Blob([ab], {type:"audio/wav"});
+}
+
+function saveDirect(blob, name){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ try{ a.remove(); URL.revokeObjectURL(url); }catch(e){} }, 8000);
+}
+
 async function setupSave(){
-  const note = $("#save-note"), btn = $("#bounce");
+  const note = $("#save-note"), btn = $("#bounce"), how = $("#bounce-how");
   if(S.downloads === undefined){
     try{ S.downloads = (window.claude && window.claude.use)
       ? await window.claude.use("downloads") : null; }
     catch(e){ S.downloads = null; }
   }
-  const mime = pickMime();
+  const secs = S.original.duration;
 
   if(!S.downloads){
-    btn.disabled = true;
-    say(note, "This view can't save files to your device. Open the page from your own Artifacts list rather than a preview, or use the Colab notebook to get the stems.");
+    // Outside the Artifact sandbox: full-quality WAV, straight away.
+    S.mode2 = "wav";
+    btn.disabled = false;
+    btn.textContent = "Save both stems as WAV";
+    const mb = (secs * S.original.sampleRate * 4 / 1e6);
+    how.innerHTML = "Full-quality 16-bit WAV, written straight out &mdash; no realtime pass, "+
+      "no size limit. Safari will ask twice, once per stem, and they land in Files.";
+    say(note, "About "+mb.toFixed(0)+" MB per stem.", "calm");
     return;
   }
+
+  S.mode2 = "rec";
+  const mime = pickMime();
   if(!mime){
     btn.disabled = true;
     say(note, "This browser can't record audio out. Safari on iPadOS 16 or newer can &mdash; check for a software update, or use the Colab notebook.");
     return;
   }
   btn.disabled = false;
-  const secs = S.original.duration;
+  btn.textContent = "Bounce both stems";
+  how.textContent = "Both stems record in a single pass, so this takes exactly as long as the clip plays. Keep this tab in front and the screen on. You'll be asked to confirm each file.";
   const est = secs * 192000 / 8 / 1e6;
   if(est > 15){
-    say(note, "At "+mmss(secs)+" each stem lands around "+est.toFixed(0)+" MB, over the 16 MB save limit. Bounce a shorter section, or use the Colab notebook.");
+    say(note, "At "+mmss(secs)+" each stem lands around "+est.toFixed(0)+" MB, over the 16 MB save limit. Bounce a shorter section, or open this page from GitHub Pages where that limit doesn't apply.");
   }else{
     say(note, "Bounce takes "+mmss(secs)+" &mdash; the length of the clip. Roughly "+est.toFixed(1)+" MB per stem.", "calm");
   }
@@ -1120,6 +1170,25 @@ async function setupSave(){
 
 $("#bounce").addEventListener("click", async ()=>{
   const btn = $("#bounce"), bar = $("#bprog"), txt = $("#bounce-txt");
+
+  if(S.mode2 === "wav"){
+    btn.disabled = true; btn.textContent = "Writing"; txt.classList.remove("hidden");
+    try{
+      txt.textContent = "Writing dialogue\u2026";
+      await breathe();
+      saveDirect(wavBlob(true),  S.fileName+"_DIALOGUE.wav");
+      txt.textContent = "Writing music\u2026";
+      await new Promise(r=>setTimeout(r,1200));      // Safari drops back-to-back saves
+      saveDirect(wavBlob(false), S.fileName+"_MUSIC_FX.wav");
+      txt.textContent = "Both stems saved. Look in Files \u203a Downloads.";
+    }catch(err){
+      txt.textContent = "Couldn't write the files: "+(err && err.message ? err.message : err);
+    }finally{
+      btn.disabled = false; btn.textContent = "Save both stems as WAV";
+    }
+    return;
+  }
+
   const mime = pickMime();
   if(!mime || !S.downloads) return;
   const ext = mime.indexOf("mp4") >= 0 ? "mp4" : "webm";

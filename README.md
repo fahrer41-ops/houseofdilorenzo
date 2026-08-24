@@ -37,9 +37,16 @@ Three controls:
 - **Voice focus** — weights the split toward speech frequencies. High values
   reject centred bass and cymbals but can dull consonants.
 
-Stems bounce as `.mp4` audio, which drops straight into LumaFusion, iMovie
-and Final Cut. The bounce runs in real time — a three-minute clip takes three
-minutes — because Safari can only record audio as it plays.
+Export works two ways, chosen automatically:
+
+- **Opened from GitHub Pages (or any plain URL):** full-quality 16-bit WAV,
+  written straight out. Instant, no size ceiling.
+- **Opened as a Claude Artifact:** the viewer sandbox blocks ordinary
+  downloads, so both stems are recorded through in one realtime pass and saved
+  as `.mp4` audio. A three-minute clip takes three minutes, and each stem is
+  capped at 16 MB.
+
+Either way the files drop straight into LumaFusion, iMovie and Final Cut.
 
 **Where it struggles:** mono files (there is no stereo image to read), and
 mixes where the score is also centred. Both are the notebook's job.
