@@ -1,36 +1,31 @@
-# Splitting a CDenza mix on an iPad
-
-> [!CAUTION]
-> **Do not add a `wrangler.toml` or `wrangler.jsonc` to this repository.**
->
-> A Cloudflare Workers Git integration is connected to this repo and points at
-> the Worker serving **houseofdilorenzo.com** — the live company website. That
-> site was deployed separately and its source is *not* in this repo.
->
-> Every build currently fails because there is no Wrangler config here, and
-> that failure is the only thing preventing a deploy. Adding one would let the
-> build succeed and publish this repo's contents over the live site.
->
-> The fix is to disconnect the integration: Cloudflare dashboard →
-> Workers & Pages → `houseofdilorenzo` → Settings → Builds → Disconnect.
-> Disconnecting stops new builds only; the existing deployment keeps serving.
+# Splitting a CDenza mix into dialogue and music
 
 CDenza exports a single stem — dialogue and music baked together — so muting
-one mutes everything. This repo has two ways to pull them apart, both driven
-from an iPad.
+one mutes everything. This repo has two ways to pull them apart. Neither needs
+a powerful machine, and one needs nothing installed at all.
 
-| | Splitroom (web) | UNMIX notebook (Colab) |
+| | UNMIX notebook (Colab) | Splitroom (web) |
 |---|---|---|
-| Where it runs | in Safari, on the iPad | on Google's GPUs |
-| Method | stereo centre extraction | Demucs v4 neural model |
-| Speed | ~30s for a 6-minute clip | ~1 min on a T4 GPU |
-| Quality | good when dialogue is centred | much better, handles mono |
-| Privacy | audio never leaves the tab | file is uploaded to Colab |
+| Where it runs | Google's GPUs, from any browser | in your browser, on your device |
+| Works on | desktop, laptop, tablet, phone | desktop, laptop, tablet |
+| Method | Demucs v4 neural model | stereo centre extraction |
+| Speed | ~1 min on a free T4 GPU | ~30s for a 6-minute clip |
+| Handles | anything — speech, breaths, creature sounds, mono | only speech mixed dead centre |
+| Install | none | none |
+| Privacy | file uploaded to Colab | audio never leaves the tab |
+| Length limit | none | 6 minutes |
 | Cost | free | free |
-| Length limit | 6 minutes | none |
 
-Start with **Splitroom** — it takes twenty seconds to find out whether it's
-good enough. If the split smears, go to the notebook.
+**Use the notebook.** It is the same Demucs engine as the desktop
+`UNMIXv1.0.py`, but running on Google's free GPU instead of your own machine —
+no Python, no 500 MB of PyTorch, and faster than most laptops. It is the right
+answer for almost every file.
+
+**Splitroom** is the instant, fully-offline option, but it separates by *stereo
+position*: it only works when speech sits dead centre against a wide score. It
+has no idea what a voice is, so creature sounds, breaths and foley are beyond
+it, as is any mono or narrow mix. It tells you on load when your file is one of
+those.
 
 ---
 
@@ -79,10 +74,15 @@ the notebook's job: Demucs separates by what a sound *is*, not where it sits.
 
 Same Demucs v4 engine as the desktop script, running on a free Colab GPU.
 
-1. Open the notebook in Colab from Safari.
+**[Open it directly in Colab](https://colab.research.google.com/github/fahrer41-ops/houseofdilorenzo/blob/claude/cdenza-audio-splitter-ipad-w8retd/colab/UNMIX_iPad.ipynb)** — or, if that link
+misbehaves, go to [colab.research.google.com](https://colab.research.google.com),
+then `File` → `Open notebook` → `GitHub`, and enter `fahrer41-ops/houseofdilorenzo`.
+
+1. Open the notebook in Colab.
 2. `Runtime` → `Change runtime type` → **T4 GPU** → `Save`. Skipping this
    makes it roughly ten times slower.
-3. Run the cells top to bottom. Upload, split, preview, download.
+3. `Run all`, then pick your file when the `Choose Files` button appears.
+   Upload, split, preview, download — the rest is automatic.
 
 Output is `<name>_DIALOGUE.wav` and `<name>_MUSIC_FX.wav`, full quality, no
 length limit. Video files work — the audio track is extracted automatically.
@@ -111,3 +111,21 @@ back about 21 ms adrift of the picture.
 
 If a file has no AAC track (some `.mov` exports carry PCM), the page falls back
 to playing the video through once and capturing the audio as it goes.
+
+## Note for anyone editing this repo
+
+> [!CAUTION]
+> **Do not add a `wrangler.toml` or `wrangler.jsonc` to this repository.**
+>
+> A Cloudflare Workers Git integration is connected to this repo and points at
+> the Worker serving **houseofdilorenzo.com** — the live company website. That
+> site was deployed separately and its source is *not* in this repo.
+>
+> Every build currently fails because there is no Wrangler config here, and
+> that failure is the only thing preventing a deploy. Adding one would let the
+> build succeed and publish this repo's contents over the live site.
+>
+> The fix is to disconnect the integration: Cloudflare dashboard →
+> Workers & Pages → `houseofdilorenzo` → Settings → Builds → Disconnect.
+> Disconnecting stops new builds only; the existing deployment keeps serving.
+
