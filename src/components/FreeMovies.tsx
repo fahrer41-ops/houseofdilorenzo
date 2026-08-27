@@ -8,7 +8,43 @@ type Film = {
 }
 
 // TODO(Amanda): send me each friend's film — title, filmmaker name (optional), and watch link.
-const films: Film[] = []
+const films: Film[] = [
+  {
+    title: 'Rise of the Empire — The Siege',
+    filmmaker: 'House of Di Lorenzo',
+    link: 'https://higgsfield.ai/@houseofdilorenzo/projects/rise-of-an-empire-by-house-of-di-lorenzo',
+  },
+  {
+    title: 'Amore Blu — The First Date',
+    filmmaker: 'House of Di Lorenzo',
+    link: 'https://higgsfield.ai/@houseofdilorenzo/projects/the-first-date',
+  },
+  {
+    title: 'Moonlit Tail',
+    filmmaker: 'Jeremy',
+    link: 'https://higgsfield.ai/@jeremyw/projects/@id__37c6f33a-7685-4a11-adbd-d563b5bd5204',
+  },
+  {
+    title: 'Journey',
+    filmmaker: 'Scott',
+    link: 'https://higgsfield.ai/@scott_s993/projects/journey',
+  },
+  {
+    title: 'Glitch Day',
+    filmmaker: 'Nash Koala',
+    link: 'https://higgsfield.ai/@nash_koala_1064/projects/glitch-day',
+  },
+  {
+    title: 'Fallen Leaves',
+    filmmaker: 'Jacob Everett',
+    link: 'https://higgsfield.ai/@jacob_everett/projects/fallen-leaves',
+  },
+  {
+    title: 'Pon',
+    filmmaker: 'Sam Candler',
+    link: 'https://higgsfield.ai/@sam_candler/projects/pon',
+  },
+]
 
 export default function FreeMovies() {
   useEffect(() => {
