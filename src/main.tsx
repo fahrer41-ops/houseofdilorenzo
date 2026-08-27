@@ -1,11 +1,21 @@
-import { StrictMode } from 'react'
+import { StrictMode, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import Exclusive from './components/Exclusive.tsx'
+import FreeMovies from './components/FreeMovies.tsx'
 
-const isExclusive = window.location.pathname.replace(/\/+$/, '') === '/exclusive'
+const path = window.location.pathname.replace(/\/+$/, '')
+
+const routes: Record<string, ComponentType> = {
+  '/exclusive': Exclusive,
+  '/free-movies': FreeMovies,
+}
+
+const Page = routes[path] ?? App
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>{isExclusive ? <Exclusive /> : <App />}</StrictMode>,
+  <StrictMode>
+    <Page />
+  </StrictMode>,
 )
