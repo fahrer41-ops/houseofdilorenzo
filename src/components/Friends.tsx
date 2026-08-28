@@ -47,6 +47,11 @@ const films: Film[] = [
     filmmaker: 'Lucho',
     link: 'https://higgsfield.ai/@promptpicture/projects/ruby',
   },
+  {
+    title: 'Dragon Reign',
+    filmmaker: 'HiproCreative',
+    link: 'https://higgsfield.ai/@hiprocreative/projects/dragon-reign',
+  },
 ]
 
 function ExternalIcon() {
