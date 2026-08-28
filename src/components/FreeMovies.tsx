@@ -44,6 +44,11 @@ const films: Film[] = [
     filmmaker: 'Sam Candler',
     link: 'https://higgsfield.ai/@sam_candler/projects/pon',
   },
+  {
+    title: 'Ruby',
+    filmmaker: 'Lucho',
+    link: 'https://higgsfield.ai/@promptpicture/projects/ruby',
+  },
 ]
 
 export default function FreeMovies() {
