@@ -52,6 +52,11 @@ const films: Film[] = [
     filmmaker: 'HiproCreative',
     link: 'https://higgsfield.ai/@hiprocreative/projects/dragon-reign',
   },
+  {
+    title: 'Protocol XCI',
+    filmmaker: 'En1Studios',
+    link: 'https://higgsfield.ai/@en1studios/projects/protocol-xci',
+  },
 ]
 
 function ExternalIcon() {
