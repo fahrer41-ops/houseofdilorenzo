@@ -57,6 +57,11 @@ const films: Film[] = [
     filmmaker: 'En1Studios',
     link: 'https://higgsfield.ai/@en1studios/projects/protocol-xci',
   },
+  {
+    title: 'Eyes & Ears',
+    filmmaker: 'JCG Visuals',
+    link: 'https://higgsfield.ai/@jcg_ai_visuals/projects/eyes-ears-ai-film-festival',
+  },
 ]
 
 function ExternalIcon() {
