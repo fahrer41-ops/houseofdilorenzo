@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import recordsDistributionPoster from '../assets/shop/records-distribution-poster.jpg'
+import posterAlaric from '../assets/shop/posters/poster-alaric-king.jpg'
+import posterLisandraValkyrie from '../assets/shop/posters/poster-lisandra-valkyrie.jpg'
 
 type Product = {
   id: string
@@ -21,6 +23,22 @@ const products: Product[] = [
       'Get your track on 26 worldwide platforms — iTunes, Spotify, YouTube Music, TikTok & more. One-time flat fee, you keep 100% of your streaming royalties.',
     image: recordsDistributionPoster,
     buyLink: 'https://ko-fi.com/c/81e1e85333',
+  },
+  {
+    id: 'poster-alaric',
+    name: 'Alaric — King of Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterAlaric,
+    buyLink: 'https://ko-fi.com/s/4aebbe1a5b',
+  },
+  {
+    id: 'poster-lisandra-valkyrie',
+    name: 'Lisandra — Valkyrie of Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterLisandraValkyrie,
+    buyLink: 'https://ko-fi.com/s/0a0e7c37e0',
   },
 ]
 
@@ -70,7 +88,7 @@ export default function Shop() {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="aspect-square w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+                  className="aspect-[2/3] w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
                 />
                 <div className="px-5 py-4">
                   <div className="flex items-center justify-between gap-3">
