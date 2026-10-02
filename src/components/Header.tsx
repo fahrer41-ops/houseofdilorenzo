@@ -10,6 +10,13 @@ const LINKS = [
   { href: '#contact', label: 'Contact' },
 ]
 
+// Separate pages (not homepage sections) — these open in a new tab.
+const TAB_LINKS = [
+  { href: '/series', label: 'Series' },
+  { href: '/films', label: 'Films' },
+  { href: '/shop', label: 'Shop' },
+]
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -43,14 +50,17 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="/series"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm tracking-[0.12em] text-gold uppercase transition-colors hover:text-gold-bright"
-          >
-            Series
-          </a>
+          {TAB_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm tracking-[0.12em] text-gold uppercase transition-colors hover:text-gold-bright"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
 
         <button
@@ -78,15 +88,18 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="/series"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-            className="py-2.5 text-sm tracking-[0.12em] text-gold uppercase"
-          >
-            Series
-          </a>
+          {TAB_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="py-2.5 text-sm tracking-[0.12em] text-gold uppercase"
+            >
+              {link.label}
+            </a>
+          ))}
         </nav>
       )}
     </header>

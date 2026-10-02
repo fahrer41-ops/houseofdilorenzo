@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import bannerPoster from '../assets/series-banner-poster.jpg'
+import TipCallout from './TipCallout'
 
 const SERIES_TITLE = 'Rise of an Empire'
 const SERIES_SEASON = 'Season 1 — House of Di Lorenzo'
@@ -100,6 +101,8 @@ export default function Series() {
               </div>
             </article>
           ))}
+
+          <TipCallout />
         </div>
       </section>
 
