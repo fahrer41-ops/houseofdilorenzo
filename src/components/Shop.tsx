@@ -4,6 +4,7 @@ import recordsDistributionPoster from '../assets/shop/records-distribution-poste
 import posterAlaric from '../assets/shop/posters/poster-alaric-king.jpg'
 import posterLisandraValkyrie from '../assets/shop/posters/poster-lisandra-valkyrie.jpg'
 import posterOdin from '../assets/shop/posters/poster-odin-allfather.jpg'
+import posterDante from '../assets/shop/posters/poster-dante.jpg'
 
 type Product = {
   id: string
@@ -48,6 +49,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterOdin,
     buyLink: 'https://ko-fi.com/s/e7ed2a8273',
+  },
+  {
+    id: 'poster-dante',
+    name: 'Dante — Commander of All Armies of Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterDante,
+    buyLink: 'https://ko-fi.com/s/c7566b5001',
   },
 ]
 
