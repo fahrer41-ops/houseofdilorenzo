@@ -12,6 +12,7 @@ import posterLisandro from '../assets/shop/posters/poster-lisandro.jpg'
 import posterLisandraQueen from '../assets/shop/posters/poster-lisandra-queen.jpg'
 import posterKiss from '../assets/shop/posters/poster-alaric-lisandra-kiss.jpg'
 import posterLisandraThrone from '../assets/shop/posters/poster-lisandra-throne-solo.jpg'
+import posterLisandraKneeling from '../assets/shop/posters/poster-lisandra-kneeling-king.jpg'
 
 type Product = {
   id: string
@@ -120,6 +121,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterLisandraThrone,
     buyLink: 'https://ko-fi.com/s/7555fd9670',
+  },
+  {
+    id: 'poster-lisandra-kneeling',
+    name: 'Lisandra Kneeling Before Odin',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterLisandraKneeling,
+    buyLink: 'https://ko-fi.com/s/41a3acea23',
   },
 ]
 
