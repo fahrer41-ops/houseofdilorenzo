@@ -27,6 +27,7 @@ const episodes: Episode[] = [
     number: 1,
     title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
     videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
+    downloadLink: 'https://ko-fi.com/s/c1574ec04a',
     downloadPrice: '$5',
   },
 ]
