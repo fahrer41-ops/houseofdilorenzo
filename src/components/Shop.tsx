@@ -3,6 +3,7 @@ import crestIcon from '../assets/crest-icon.png'
 import recordsDistributionPoster from '../assets/shop/records-distribution-poster.jpg'
 import posterAlaric from '../assets/shop/posters/poster-alaric-king.jpg'
 import posterLisandraValkyrie from '../assets/shop/posters/poster-lisandra-valkyrie.jpg'
+import posterOdin from '../assets/shop/posters/poster-odin-allfather.jpg'
 
 type Product = {
   id: string
@@ -39,6 +40,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterLisandraValkyrie,
     buyLink: 'https://ko-fi.com/s/0a0e7c37e0',
+  },
+  {
+    id: 'poster-odin',
+    name: 'Odin — Allfather of Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterOdin,
+    buyLink: 'https://ko-fi.com/s/e7ed2a8273',
   },
 ]
 
