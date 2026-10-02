@@ -43,6 +43,14 @@ export default function Header() {
               {link.label}
             </a>
           ))}
+          <a
+            href="/series"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm tracking-[0.12em] text-gold uppercase transition-colors hover:text-gold-bright"
+          >
+            Series
+          </a>
         </nav>
 
         <button
@@ -70,6 +78,15 @@ export default function Header() {
               {link.label}
             </a>
           ))}
+          <a
+            href="/series"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
+            className="py-2.5 text-sm tracking-[0.12em] text-gold uppercase"
+          >
+            Series
+          </a>
         </nav>
       )}
     </header>

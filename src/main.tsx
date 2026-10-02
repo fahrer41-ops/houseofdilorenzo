@@ -4,12 +4,14 @@ import './index.css'
 import App from './App.tsx'
 import Exclusive from './components/Exclusive.tsx'
 import FreeMovies from './components/FreeMovies.tsx'
+import Series from './components/Series.tsx'
 
 const path = window.location.pathname.replace(/\/+$/, '')
 
 const routes: Record<string, ComponentType> = {
   '/exclusive': Exclusive,
   '/free-movies': FreeMovies,
+  '/series': Series,
 }
 
 const Page = routes[path] ?? App
