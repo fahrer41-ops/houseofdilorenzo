@@ -12,6 +12,10 @@ type Episode = {
   number: number
   title: string
   videoId: string
+  // TODO(Amanda): once you've made the Ko-fi Digital Download listing
+  // for this episode's actual video file, drop the link in here.
+  downloadLink?: string
+  downloadPrice?: string
 }
 
 // Cloudflare Stream — same account as the rest of the site's hosting.
@@ -23,6 +27,7 @@ const episodes: Episode[] = [
     number: 1,
     title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
     videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
+    downloadPrice: '$5',
   },
 ]
 
@@ -99,6 +104,22 @@ export default function Series() {
                   title={ep.title}
                 />
               </div>
+
+              {ep.downloadPrice && (
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-ink px-5 py-4">
+                  <p className="font-body text-sm text-ivory-dim">
+                    Stream it free above, or own the file — yours to keep, offline, no ads.
+                  </p>
+                  <a
+                    href={ep.downloadLink ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold shrink-0 whitespace-nowrap"
+                  >
+                    Download — {ep.downloadPrice}
+                  </a>
+                </div>
+              )}
             </article>
           ))}
 
