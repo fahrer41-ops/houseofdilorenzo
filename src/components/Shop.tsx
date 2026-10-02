@@ -13,6 +13,8 @@ import posterLisandraQueen from '../assets/shop/posters/poster-lisandra-queen.jp
 import posterKiss from '../assets/shop/posters/poster-alaric-lisandra-kiss.jpg'
 import posterLisandraThrone from '../assets/shop/posters/poster-lisandra-throne-solo.jpg'
 import posterLisandraKneeling from '../assets/shop/posters/poster-lisandra-kneeling-king.jpg'
+import posterAlaricLisandroTraining from '../assets/shop/posters/poster-alaric-lisandro-training.jpg'
+import posterAlaricKneeling from '../assets/shop/posters/poster-lisandra-alaric-throne.jpg'
 
 type Product = {
   id: string
@@ -129,6 +131,22 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterLisandraKneeling,
     buyLink: 'https://ko-fi.com/s/41a3acea23',
+  },
+  {
+    id: 'poster-alaric-lisandro-training',
+    name: 'Alaric & Lisandro — Training',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterAlaricLisandroTraining,
+    buyLink: 'https://ko-fi.com/s/84dfdda39e',
+  },
+  {
+    id: 'poster-alaric-kneeling',
+    name: 'Alaric Kneeling Before Lisandra',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterAlaricKneeling,
+    buyLink: 'https://ko-fi.com/s/08c508549d',
   },
 ]
 
