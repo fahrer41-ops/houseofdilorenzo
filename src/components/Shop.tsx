@@ -8,6 +8,7 @@ import posterDante from '../assets/shop/posters/poster-dante.jpg'
 import posterRunar from '../assets/shop/posters/poster-runar.jpg'
 import posterBjorn from '../assets/shop/posters/poster-bjorn.jpg'
 import posterHakon from '../assets/shop/posters/poster-hakon.jpg'
+import posterLisandro from '../assets/shop/posters/poster-lisandro.jpg'
 
 type Product = {
   id: string
@@ -84,6 +85,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterHakon,
     buyLink: 'https://ko-fi.com/s/4667712206',
+  },
+  {
+    id: 'poster-lisandro',
+    name: 'Lisandro — Prince, Heir to House Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterLisandro,
+    buyLink: 'https://ko-fi.com/s/350db9bf58',
   },
 ]
 
