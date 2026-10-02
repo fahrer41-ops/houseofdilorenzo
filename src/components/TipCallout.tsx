@@ -1,6 +1,4 @@
-// TODO(Amanda): swap in your real tip link once the account exists
-// (Ko-fi, Buy Me a Coffee, whatever you land on).
-const TIP_URL = '#'
+const TIP_URL = 'https://ko-fi.com/houseofdilorenzo'
 
 export default function TipCallout() {
   return (

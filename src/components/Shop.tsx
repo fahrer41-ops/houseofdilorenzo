@@ -34,9 +34,19 @@ export default function Shop() {
 
       <div className="mx-auto mt-14 max-w-5xl">
         {products.length === 0 ? (
-          <p className="reveal is-visible text-center font-body text-sm text-ivory-dim italic">
-            Opening soon.
-          </p>
+          <div className="reveal is-visible text-center">
+            <p className="font-body text-sm text-ivory-dim italic">
+              Posters, character sheets, and prompts — opening soon. In the meantime:
+            </p>
+            <a
+              href="https://ko-fi.com/houseofdilorenzo/shop"
+              target="_blank"
+              rel="noreferrer"
+              className="btn-gold mt-6 inline-block"
+            >
+              Visit the Shop on Ko-fi
+            </a>
+          </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
