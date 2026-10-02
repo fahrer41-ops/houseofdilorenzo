@@ -15,6 +15,7 @@ import posterLisandraThrone from '../assets/shop/posters/poster-lisandra-throne-
 import posterLisandraKneeling from '../assets/shop/posters/poster-lisandra-kneeling-king.jpg'
 import posterAlaricLisandroTraining from '../assets/shop/posters/poster-alaric-lisandro-training.jpg'
 import posterAlaricKneeling from '../assets/shop/posters/poster-lisandra-alaric-throne.jpg'
+import posterFullBundle from '../assets/shop/posters/poster-king-throne-wolves.jpg'
 
 type Product = {
   id: string
@@ -147,6 +148,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterAlaricKneeling,
     buyLink: 'https://ko-fi.com/s/08c508549d',
+  },
+  {
+    id: 'bundle-full',
+    name: 'The Complete Collection — All 15 Posters',
+    price: '$20',
+    description: 'Every character and scene poster, all in one bundle.',
+    image: posterFullBundle,
+    buyLink: 'https://ko-fi.com/s/e16cbfdc07',
   },
 ]
 
