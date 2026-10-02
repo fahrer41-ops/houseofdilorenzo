@@ -98,7 +98,7 @@ const products: Product[] = [
   {
     id: 'bundle-lisandra',
     name: 'Lisandra Bundle — 3 Posters',
-    price: '$10',
+    price: '$7',
     description: 'Same Woman, Two Worlds + Valkyrie + Queen, all three together.',
     image: posterLisandraQueen,
     buyLink: 'https://ko-fi.com/s/d150f56931',
