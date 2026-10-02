@@ -6,6 +6,7 @@ import posterLisandraValkyrie from '../assets/shop/posters/poster-lisandra-valky
 import posterOdin from '../assets/shop/posters/poster-odin-allfather.jpg'
 import posterDante from '../assets/shop/posters/poster-dante.jpg'
 import posterRunar from '../assets/shop/posters/poster-runar.jpg'
+import posterBjorn from '../assets/shop/posters/poster-bjorn.jpg'
 
 type Product = {
   id: string
@@ -66,6 +67,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterRunar,
     buyLink: 'https://ko-fi.com/s/cc36e618c5',
+  },
+  {
+    id: 'poster-bjorn',
+    name: 'Björn — Son of the North of Di Lorenzo',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterBjorn,
+    buyLink: 'https://ko-fi.com/s/03784a57af',
   },
 ]
 
