@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import TipCallout from './TipCallout'
 
-// TODO(Amanda): tell me what goes here — your completed full-length
-// films (Rise of an Empire: The Siege, Amore Blu...), separate from
-// the homepage Portfolio clips and the episodic Series. Embedded here,
-// or linked out to YouTube?
+// Confirmed scope: Rise of an Empire: The Siege + Amore Blu — Amanda's
+// two completed full-length films, separate from the homepage
+// Portfolio clips and the episodic Series. Both need a post-production
+// pass before they're ready to list here (still TODO: embed vs
+// link-out to YouTube, once she's back to this).
 type Film = {
   id: string
   title: string
