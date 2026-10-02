@@ -2,17 +2,15 @@ import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 
 // TODO(Amanda): swap in the real banner art/clip — Alaric snowboarding
-// off the dragon — once you've got it exported. For now this is a plain
+// off the dragon — once you've got it made. For now this is a plain
 // gradient so the page has something to look at.
-
-// TODO(Amanda): confirm the series name and tagline below.
-const SERIES_TITLE = 'The Series'
+const SERIES_TITLE = 'Rise of an Empire'
+const SERIES_SEASON = 'Season 1 — House of Di Lorenzo'
 const SERIES_TAGLINE = 'Episodes you won’t find anywhere else.'
 
 type Episode = {
   id: string
   number: number
-  // TODO(Amanda): swap in Episode 1's real title.
   title: string
   videoId: string
 }
@@ -24,7 +22,7 @@ const episodes: Episode[] = [
   {
     id: 'ep1',
     number: 1,
-    title: 'Episode 1',
+    title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
     videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
   },
 ]
@@ -48,10 +46,11 @@ export default function Series() {
 
         <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-6 py-24 text-center">
           <img src={crestIcon} alt="" className="mb-8 h-16 w-16 object-contain opacity-95" />
-          <p className="eyebrow mb-4">House of Di Lorenzo</p>
+          <p className="eyebrow mb-4">House of Di Lorenzo Productions</p>
           <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
             {SERIES_TITLE}
           </h1>
+          <p className="mt-3 font-display text-lg text-gold-bright italic sm:text-xl">{SERIES_SEASON}</p>
           <p className="mt-5 max-w-xl font-body text-lg text-ivory-dim italic">{SERIES_TAGLINE}</p>
           <p className="mt-6 text-xs tracking-[0.14em] text-gold-dim uppercase">
             Mature themes · Intended for adult audiences
