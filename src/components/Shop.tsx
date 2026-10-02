@@ -10,6 +10,7 @@ import posterBjorn from '../assets/shop/posters/poster-bjorn.jpg'
 import posterHakon from '../assets/shop/posters/poster-hakon.jpg'
 import posterLisandro from '../assets/shop/posters/poster-lisandro.jpg'
 import posterLisandraQueen from '../assets/shop/posters/poster-lisandra-queen.jpg'
+import posterKiss from '../assets/shop/posters/poster-alaric-lisandra-kiss.jpg'
 
 type Product = {
   id: string
@@ -102,6 +103,14 @@ const products: Product[] = [
     description: 'Same Woman, Two Worlds + Valkyrie + Queen, all three together.',
     image: posterLisandraQueen,
     buyLink: 'https://ko-fi.com/s/d150f56931',
+  },
+  {
+    id: 'poster-kiss',
+    name: 'Alaric & Lisandra',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterKiss,
+    buyLink: 'https://ko-fi.com/s/b933ec19be',
   },
 ]
 
