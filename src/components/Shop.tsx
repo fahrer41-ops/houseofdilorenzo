@@ -9,6 +9,7 @@ import posterRunar from '../assets/shop/posters/poster-runar.jpg'
 import posterBjorn from '../assets/shop/posters/poster-bjorn.jpg'
 import posterHakon from '../assets/shop/posters/poster-hakon.jpg'
 import posterLisandro from '../assets/shop/posters/poster-lisandro.jpg'
+import posterLisandraQueen from '../assets/shop/posters/poster-lisandra-queen.jpg'
 
 type Product = {
   id: string
@@ -93,6 +94,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterLisandro,
     buyLink: 'https://ko-fi.com/s/350db9bf58',
+  },
+  {
+    id: 'bundle-lisandra',
+    name: 'Lisandra Bundle — 3 Posters',
+    price: '$10',
+    description: 'Same Woman, Two Worlds + Valkyrie + Queen, all three together.',
+    image: posterLisandraQueen,
+    buyLink: 'https://ko-fi.com/s/d150f56931',
   },
 ]
 
