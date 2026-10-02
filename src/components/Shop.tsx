@@ -7,6 +7,7 @@ import posterOdin from '../assets/shop/posters/poster-odin-allfather.jpg'
 import posterDante from '../assets/shop/posters/poster-dante.jpg'
 import posterRunar from '../assets/shop/posters/poster-runar.jpg'
 import posterBjorn from '../assets/shop/posters/poster-bjorn.jpg'
+import posterHakon from '../assets/shop/posters/poster-hakon.jpg'
 
 type Product = {
   id: string
@@ -75,6 +76,14 @@ const products: Product[] = [
     description: 'Digital poster, full resolution.',
     image: posterBjorn,
     buyLink: 'https://ko-fi.com/s/03784a57af',
+  },
+  {
+    id: 'poster-hakon',
+    name: 'Hakon — Elder of Di Lorenzo War Council',
+    price: '$4',
+    description: 'Digital poster, full resolution.',
+    image: posterHakon,
+    buyLink: 'https://ko-fi.com/s/4667712206',
   },
 ]
 
