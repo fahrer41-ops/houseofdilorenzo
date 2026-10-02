@@ -1,18 +1,28 @@
 import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
+import recordsDistributionPoster from '../assets/shop/records-distribution-poster.jpg'
 
-// TODO(Amanda): once you've got a Ko-fi/Buy Me a Coffee shop (or
-// whatever platform you land on) set up, send me each product's name,
-// price, image, and buy link, and I'll drop them in here.
 type Product = {
   id: string
   name: string
   price: string
+  description?: string
   image: string
   buyLink: string
 }
 
-const products: Product[] = []
+const products: Product[] = [
+  {
+    id: 'music-distribution',
+    name: 'Music Distribution — House of Di Lorenzo Records',
+    // TODO(Amanda): confirm this is the real price, not just the template placeholder.
+    price: '$15',
+    description:
+      'Get your track on 26 worldwide platforms — iTunes, Spotify, YouTube Music, TikTok & more. One-time flat fee, you keep 100% of your streaming royalties.',
+    image: recordsDistributionPoster,
+    buyLink: 'https://ko-fi.com/c/81e1e85333',
+  },
+]
 
 export default function Shop() {
   useEffect(() => {
@@ -62,9 +72,14 @@ export default function Shop() {
                   alt={product.name}
                   className="aspect-square w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
                 />
-                <div className="flex items-center justify-between px-5 py-4">
-                  <p className="font-display text-lg text-ivory">{product.name}</p>
-                  <p className="font-body text-sm text-gold">{product.price}</p>
+                <div className="px-5 py-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-display text-lg text-ivory">{product.name}</p>
+                    <p className="shrink-0 font-body text-sm text-gold">{product.price}</p>
+                  </div>
+                  {product.description && (
+                    <p className="mt-2 font-body text-sm text-ivory-dim">{product.description}</p>
+                  )}
                 </div>
               </a>
             ))}
