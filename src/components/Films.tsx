@@ -23,6 +23,7 @@ const films: Film[] = [
     videoId: '7755b7716b64711f1f1106a32ae05696',
     // Temporary 24h price bump — revert to '$20' after.
     downloadPrice: 'CHF 50',
+    downloadLink: 'https://ko-fi.com/s/f535616f23',
   },
 ]
 
