@@ -2,19 +2,34 @@ import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import TipCallout from './TipCallout'
 
-// Confirmed scope: Rise of an Empire: The Siege + Amore Blu — Amanda's
-// two completed full-length films, separate from the homepage
-// Portfolio clips and the episodic Series. Both need a post-production
-// pass before they're ready to list here (still TODO: embed vs
-// link-out to YouTube, once she's back to this).
 type Film = {
   id: string
   title: string
-  description?: string
-  link: string
+  videoId: string
+  // TODO(Amanda): add a download price here if you want the same
+  // paid-download option the Series episodes have (you mentioned
+  // $15–20 for a 90-minute film, but hadn't settled on one yet).
+  downloadLink?: string
+  downloadPrice?: string
 }
 
-const films: Film[] = []
+// Cloudflare Stream — same account as the rest of the site's hosting.
+const STREAM_CUSTOMER_CODE = 'ppcygtjv41676m0o'
+
+const films: Film[] = [
+  {
+    id: 'rise-of-an-empire-siege',
+    title: 'Rise of an Empire — The Siege',
+    videoId: '7755b7716b64711f1f1106a32ae05696',
+  },
+]
+
+function streamEmbedSrc(videoId: string) {
+  const poster = encodeURIComponent(
+    `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`,
+  )
+  return `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${videoId}/iframe?poster=${poster}`
+}
 
 export default function Films() {
   useEffect(() => {
@@ -32,32 +47,42 @@ export default function Films() {
         <p className="mt-5 font-body text-ivory-dim">The complete stories, start to end.</p>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-3xl flex-col gap-10">
+      <div className="mx-auto mt-14 flex max-w-3xl flex-col gap-14">
         {films.length === 0 ? (
           <p className="reveal is-visible text-center font-body text-sm text-ivory-dim italic">
             Films coming soon.
           </p>
         ) : (
           films.map((film) => (
-            <a
-              key={film.id}
-              href={film.link}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex items-center justify-between border border-ink-line bg-ink px-6 py-5 transition-colors hover:border-gold"
-            >
-              <div className="text-left">
-                <p className="font-display text-lg text-ivory">{film.title}</p>
-                {film.description && (
-                  <p className="mt-1 font-body text-sm text-ivory-dim">{film.description}</p>
-                )}
+            <article key={film.id} className="reveal is-visible">
+              <h2 className="mb-5 font-display text-2xl text-ivory sm:text-3xl">{film.title}</h2>
+              <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
+                <iframe
+                  src={streamEmbedSrc(film.videoId)}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full border-0"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                  allowFullScreen
+                  title={film.title}
+                />
               </div>
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold-dim text-gold transition-colors group-hover:border-gold group-hover:text-gold-bright">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </span>
-            </a>
+
+              {film.downloadPrice && (
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-ink px-5 py-4">
+                  <p className="font-body text-sm text-ivory-dim">
+                    Stream it free above, or own the file — yours to keep, offline, no ads.
+                  </p>
+                  <a
+                    href={film.downloadLink ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold shrink-0 whitespace-nowrap"
+                  >
+                    Download — {film.downloadPrice}
+                  </a>
+                </div>
+              )}
+            </article>
           ))
         )}
 
