@@ -21,6 +21,7 @@ const films: Film[] = [
     id: 'rise-of-an-empire-siege',
     title: 'Rise of an Empire — The Siege',
     videoId: '7755b7716b64711f1f1106a32ae05696',
+    downloadPrice: '$20',
   },
 ]
 
