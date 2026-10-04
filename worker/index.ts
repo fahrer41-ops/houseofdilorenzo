@@ -8,6 +8,7 @@ interface Env {
 const KNOWN_SLUGS = new Set([
   'series-ep1',
   'film-rise-of-an-empire-siege',
+  'film-start-of-forever',
 ])
 
 function jsonResponse(body: unknown, init?: ResponseInit) {

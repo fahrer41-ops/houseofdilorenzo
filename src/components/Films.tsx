@@ -22,9 +22,13 @@ const films: Film[] = [
     id: 'rise-of-an-empire-siege',
     title: 'Rise of an Empire — The Siege',
     videoId: '7755b7716b64711f1f1106a32ae05696',
-    // Temporary 24h price bump — revert to '$20' after.
-    downloadPrice: 'CHF 50',
+    downloadPrice: '$20',
     downloadLink: 'https://ko-fi.com/s/f535616f23',
+  },
+  {
+    id: 'start-of-forever',
+    title: 'House of Di Lorenzo — The Start of Forever',
+    videoId: '23c167dce29b2512817f47e142d3ac7b',
   },
 ]
 
