@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import bannerPoster from '../assets/series-banner-poster.jpg'
 import TipCallout from './TipCallout'
+import ViewCounter from './ViewCounter'
 
 const SERIES_TITLE = 'Rise of an Empire'
 const SERIES_SEASON = 'Season 1 — House of Di Lorenzo'
@@ -94,7 +95,8 @@ export default function Series() {
           {episodes.map((ep) => (
             <article key={ep.id} className="reveal is-visible">
               <p className="eyebrow mb-3">Episode {ep.number}</p>
-              <h2 className="mb-5 font-display text-2xl text-ivory sm:text-3xl">{ep.title}</h2>
+              <h2 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">{ep.title}</h2>
+              <ViewCounter slug={`series-${ep.id}`} className="mb-5" />
               <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
                 <iframe
                   src={streamEmbedSrc(ep.videoId)}

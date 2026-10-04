@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import TipCallout from './TipCallout'
+import ViewCounter from './ViewCounter'
 
 type Film = {
   id: string
@@ -58,7 +59,8 @@ export default function Films() {
         ) : (
           films.map((film) => (
             <article key={film.id} className="reveal is-visible">
-              <h2 className="mb-5 font-display text-2xl text-ivory sm:text-3xl">{film.title}</h2>
+              <h2 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">{film.title}</h2>
+              <ViewCounter slug={`film-${film.id}`} className="mb-5" />
               <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
                 <iframe
                   src={streamEmbedSrc(film.videoId)}
