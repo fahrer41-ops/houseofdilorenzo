@@ -62,6 +62,11 @@ const films: Film[] = [
     filmmaker: 'JCG Visuals',
     link: 'https://higgsfield.ai/@jcg_ai_visuals/projects/eyes-ears-ai-film-festival',
   },
+  {
+    title: 'Voices in the Void: Hollow Heart',
+    filmmaker: 'man-aye',
+    link: 'https://higgsfield.ai/@man-aye/projects/voices-in-the-void',
+  },
 ]
 
 function ExternalIcon() {
