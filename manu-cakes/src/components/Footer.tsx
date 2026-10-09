@@ -9,7 +9,7 @@ export default function Footer() {
         Manu <span className="gold-text not-italic">Cakes</span>
       </p>
       <p className="mt-2 font-body text-xs tracking-wide text-plum-dim/70">
-        {t.footer.location} · &copy; {new Date().getFullYear()} Manuela Climonxa
+        {t.footer.location} · &copy; {new Date().getFullYear()} Manuela Clemenza
       </p>
     </footer>
   )
