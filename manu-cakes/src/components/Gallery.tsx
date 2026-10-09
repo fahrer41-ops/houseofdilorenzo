@@ -1,7 +1,7 @@
 import roseWedding from '../assets/gallery-rose-wedding.jpg'
-import nakedBlueberry from '../assets/gallery-naked-blueberry.jpg'
-import heartDrip from '../assets/gallery-heart-drip.jpg'
-import farm from '../assets/gallery-farm.jpg'
+import chocolateDripBars from '../assets/chocolate-drip-bars.jpg'
+import farmHires from '../assets/farm-hires.jpg'
+import unicornHires from '../assets/unicorn-hires.jpg'
 import birthdayPinkGold from '../assets/birthday-pink-gold.jpg'
 import teddyBearFirst from '../assets/teddy-bear-first.jpg'
 import ohBaby from '../assets/oh-baby.jpg'
@@ -14,9 +14,9 @@ import { useLanguage } from '../i18n/LanguageContext'
 
 const images = [
   roseWedding,
-  heartDrip,
-  farm,
-  nakedBlueberry,
+  chocolateDripBars,
+  farmHires,
+  unicornHires,
   birthdayPinkGold,
   teddyBearFirst,
   ohBaby,

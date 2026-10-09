@@ -28,9 +28,9 @@ export const content = {
       body: 'Una selezione delle creazioni di Manuela — ogni pezzo fatto a mano, su misura per il momento che festeggi.',
       pieces: [
         'Torta Nuziale, Rose Rosse',
-        '“Auguri Amore”',
+        'Torta Drip al Cioccolato',
         'Torta a Tema Fattoria',
-        'Naked Cake, Mirtilli e Fiori',
+        'Torta Unicorno',
         'Torta di Compleanno, Rosa e Oro',
         'Torta Orsetto, Primo Compleanno',
         '“Oh Baby” Gender Reveal',
@@ -131,9 +131,9 @@ export const content = {
       body: 'Eine Auswahl von Manuelas Kreationen — jedes Stück von Hand gefertigt, massgeschneidert für den Anlass, den Sie feiern.',
       pieces: [
         'Hochzeitstorte mit roten Rosen',
-        '„Auguri Amore“',
+        'Drip-Torte mit Schokolade',
         'Bauernhof-Torte',
-        'Naked Cake mit Heidelbeeren und Blüten',
+        'Einhorn-Torte',
         'Geburtstagstorte in Rosa und Gold',
         'Bärchen-Torte zum ersten Geburtstag',
         '„Oh Baby“ Gender-Reveal-Torte',
