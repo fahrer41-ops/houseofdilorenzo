@@ -24,8 +24,9 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="reveal is-visible">
-          <div className="overflow-hidden rounded-[2rem] border border-blush-deep shadow-xl shadow-rose/10">
+        <div className="reveal is-visible relative">
+          <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-dusk/70 sm:-inset-6" />
+          <div className="overflow-hidden rounded-[2rem] border-2 border-gold/40 shadow-xl shadow-plum/20">
             <img src={heroCake} alt={t.hero.heroImageAlt} className="w-full object-cover" />
           </div>
         </div>

@@ -11,6 +11,7 @@ export default function Services() {
           <h2 className="font-display text-3xl text-plum sm:text-4xl">
             {t.services.titleStart} <span className="gold-text italic">{t.services.titleEmphasis}</span>
           </h2>
+          <div className="ornament-divider mt-6 text-xs">&#10022;</div>
         </div>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

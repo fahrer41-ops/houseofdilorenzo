@@ -26,9 +26,9 @@ export default function Gallery() {
           {t.gallery.pieces.map((title, i) => (
             <figure
               key={title}
-              className="reveal group overflow-hidden rounded-2xl border border-blush-deep bg-blush"
+              className="reveal group overflow-hidden rounded-2xl border border-gold/30 bg-blush shadow-sm shadow-plum/5"
             >
-              <div className="aspect-square overflow-hidden">
+              <div className="aspect-[4/5] overflow-hidden">
                 <img
                   src={images[i]}
                   alt={title}

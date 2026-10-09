@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-blush: #fbeef0;
-  --color-blush-deep: #f3d8dd;
+  --color-blush: #f7dde3;
+  --color-blush-deep: #eebfc9;
   --color-cream: #fdf9f4;
   --color-plum: #3a2630;
   --color-plum-dim: #6e5560;
@@ -11,6 +11,8 @@
   --color-gold: #c49a6c;
   --color-gold-dim: #8f7154;
   --color-sage: #9bab8f;
+  --color-dusk: #7e93a3;
+  --color-dusk-deep: #5e7383;
 
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-body: 'Mulish', 'Helvetica Neue', Arial, sans-serif;
@@ -110,6 +112,23 @@ body {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--color-gold);
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  height: 1px;
+  width: 2.5rem;
+  background: var(--color-gold);
+  opacity: 0.6;
 }
 
 @media (prefers-reduced-motion: reduce) {
