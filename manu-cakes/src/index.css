@@ -1,0 +1,120 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-blush: #fbeef0;
+  --color-blush-deep: #f3d8dd;
+  --color-cream: #fdf9f4;
+  --color-plum: #3a2630;
+  --color-plum-dim: #6e5560;
+  --color-rose: #b5466b;
+  --color-rose-bright: #d16f8e;
+  --color-gold: #c49a6c;
+  --color-gold-dim: #8f7154;
+  --color-sage: #9bab8f;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Mulish', 'Helvetica Neue', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-plum);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-rose);
+}
+
+.gold-text {
+  color: var(--color-gold);
+}
+
+.btn-rose {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  color: var(--color-cream);
+  background: var(--color-rose);
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.btn-rose:hover {
+  background: var(--color-rose-bright);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--color-plum);
+  background: transparent;
+  border: 1.5px solid var(--color-gold);
+  padding: 0.8rem 1.85rem;
+  border-radius: 999px;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-rose);
+  color: var(--color-rose);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
