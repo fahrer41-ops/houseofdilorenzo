@@ -1,12 +1,31 @@
 import roseWedding from '../assets/gallery-rose-wedding.jpg'
-import chocolateBerry from '../assets/gallery-chocolate-berry.jpg'
-import unicorn from '../assets/gallery-unicorn.jpg'
 import nakedBlueberry from '../assets/gallery-naked-blueberry.jpg'
 import heartDrip from '../assets/gallery-heart-drip.jpg'
 import farm from '../assets/gallery-farm.jpg'
+import birthdayPinkGold from '../assets/birthday-pink-gold.jpg'
+import teddyBearFirst from '../assets/teddy-bear-first.jpg'
+import ohBaby from '../assets/oh-baby.jpg'
+import moonStars from '../assets/moon-stars.jpg'
+import chocolateFig from '../assets/chocolate-fig.jpg'
+import eighteenDennis from '../assets/eighteen-dennis.jpg'
+import christeningThomas from '../assets/christening-thomas.jpg'
+import pistachio50 from '../assets/pistachio-50.jpg'
 import { useLanguage } from '../i18n/LanguageContext'
 
-const images = [roseWedding, chocolateBerry, unicorn, nakedBlueberry, heartDrip, farm]
+const images = [
+  roseWedding,
+  heartDrip,
+  farm,
+  nakedBlueberry,
+  birthdayPinkGold,
+  teddyBearFirst,
+  ohBaby,
+  moonStars,
+  chocolateFig,
+  eighteenDennis,
+  christeningThomas,
+  pistachio50,
+]
 
 export default function Gallery() {
   const { t } = useLanguage()
