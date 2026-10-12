@@ -71,6 +71,7 @@ export default function VoicesInTheVoid() {
           <p className="mt-6 font-body text-sm tracking-[0.1em] text-[#9b9183] uppercase">
             A film by <span className="text-[#ece6d9]">man-aye</span>
           </p>
+          <ViewCounter slug="voices-in-the-void" className="mt-4" />
         </div>
       </section>
 
@@ -139,7 +140,6 @@ export default function VoicesInTheVoid() {
 
           {intent === 'watch' && (
             <>
-              <ViewCounter slug="voices-in-the-void" className="mb-5" />
               <div className="relative aspect-video w-full overflow-hidden border border-[#2a2420] bg-black shadow-[0_0_60px_-15px_rgba(138,31,31,0.35)]">
                 <iframe
                   src={streamEmbedSrc(VIDEO_ID)}
