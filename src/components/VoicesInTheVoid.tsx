@@ -65,8 +65,7 @@ export default function VoicesInTheVoid() {
             Hollow Heart must find a way to free them.
           </p>
           <p className="mt-6 font-body text-sm tracking-[0.1em] text-[#9b9183] uppercase">
-            A film by <span className="text-[#ece6d9]">man-aye</span>{' '}
-            <span className="text-[#6e6657]">(Cameron)</span>
+            A film by <span className="text-[#ece6d9]">man-aye</span>
           </p>
         </div>
       </section>
