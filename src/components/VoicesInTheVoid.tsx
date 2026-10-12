@@ -67,6 +67,17 @@ export default function VoicesInTheVoid() {
             />
           </div>
 
+          <div className="mt-6 text-center">
+            <a
+              href="https://higgsfield.ai/@man-aye/projects/voices-in-the-void"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blood px-9 py-3.5 font-body text-sm font-semibold tracking-[0.14em] text-[#f2ede0] uppercase transition-colors hover:bg-blood-bright"
+            >
+              Vote for this Film
+            </a>
+          </div>
+
           <div className="mt-10 border-t border-[#201c18] pt-8 text-center">
             <p className="font-body text-sm text-[#9b9183]">
               Entered in the{' '}
