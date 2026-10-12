@@ -80,7 +80,7 @@ export default function VoicesInTheVoid() {
             <div className="border border-[#2a2420] bg-black/40 px-6 py-14 text-center sm:px-10">
               <p className="font-display text-2xl text-[#f2ede0] sm:text-3xl">What brings you here?</p>
               <p className="mx-auto mt-3 max-w-md font-body text-sm text-[#9b9183]">
-                Voting for this film only counts when it happens on Higgsfield itself — so pick the right
+                Voting for this film only counts when it happens on Higgsfield itself — so pick the red
                 door and you won't need to watch it twice.
               </p>
               <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
