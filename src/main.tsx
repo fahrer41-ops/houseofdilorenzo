@@ -7,6 +7,7 @@ import FreeMovies from './components/FreeMovies.tsx'
 import Series from './components/Series.tsx'
 import Films from './components/Films.tsx'
 import Shop from './components/Shop.tsx'
+import VoicesInTheVoid from './components/VoicesInTheVoid.tsx'
 
 const path = window.location.pathname.replace(/\/+$/, '')
 
@@ -16,6 +17,7 @@ const routes: Record<string, ComponentType> = {
   '/series': Series,
   '/films': Films,
   '/shop': Shop,
+  '/voices-in-the-void': VoicesInTheVoid,
 }
 
 const Page = routes[path] ?? App

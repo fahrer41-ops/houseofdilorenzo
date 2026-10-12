@@ -15,6 +15,11 @@
 
   --color-ivory: #f4efe3;
   --color-ivory-dim: #b6ac97;
+
+  /* Used on the Voices in the Void guest-creator page only. */
+  --color-blood: #8a1f1f;
+  --color-blood-bright: #c23a3a;
+  --color-blood-dim: #4d1212;
 }
 
 @layer base {
