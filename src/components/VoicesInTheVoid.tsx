@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import posterImg from '../assets/voices-in-the-void-poster.jpg'
 import ViewCounter from './ViewCounter'
 
@@ -14,19 +14,37 @@ function streamEmbedSrc(videoId: string) {
 }
 
 export default function VoicesInTheVoid() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
   useEffect(() => {
     document.title = 'Voices in the Void: Hollow Heart — a film by man-aye'
+  }, [])
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!prefersReducedMotion) {
+      videoRef.current?.play().catch(() => {
+        // Autoplay can be blocked by the browser; the poster frame stands in fine.
+      })
+    }
   }, [])
 
   return (
     <div className="min-h-screen bg-[#07080b] font-body text-[#ece6d9]">
       <section className="relative flex min-h-[85vh] items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            src={posterImg}
-            alt=""
+          <video
+            ref={videoRef}
+            poster={posterImg}
+            muted
+            loop
+            playsInline
+            preload="auto"
             className="h-full w-full object-cover object-[center_30%]"
-          />
+          >
+            <source src="/voices-banner.webm" type="video/webm" />
+            <source src="/voices-banner.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-b from-[#07080b]/20 via-[#07080b]/55 to-[#07080b]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#07080b] via-transparent to-transparent" />
         </div>
