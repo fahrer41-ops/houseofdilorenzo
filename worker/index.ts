@@ -9,6 +9,7 @@ const KNOWN_SLUGS = new Set([
   'series-ep1',
   'film-rise-of-an-empire-siege',
   'film-start-of-forever',
+  'voices-in-the-void',
 ])
 
 function jsonResponse(body: unknown, init?: ResponseInit) {
