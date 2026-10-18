@@ -48,7 +48,16 @@ const seriesGroups: SeriesGroup[] = [
   {
     id: 'house-of-di-lorenzo',
     title: 'House of Di Lorenzo',
-    episodes: [],
+    episodes: [
+      {
+        id: 'amanda-francesco-wedding-night',
+        // TODO(Amanda): working title — rename whenever you land on one.
+        title: 'Wedding Night',
+        description: 'Amanda & Francesco finally found a time alone as Husband and Wife.',
+        videoId: 'b0fb88cfe6d4746fa89cc12815e0d07e',
+        ageRestricted: true,
+      },
+    ],
   },
 ]
 
