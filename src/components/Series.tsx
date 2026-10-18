@@ -1,35 +1,54 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import crestIcon from '../assets/crest-icon.png'
 import bannerPoster from '../assets/series-banner-poster.jpg'
 import TipCallout from './TipCallout'
 import ViewCounter from './ViewCounter'
 
-const SERIES_TITLE = 'Rise of an Empire'
-const SERIES_SEASON = 'Season 1 — House of Di Lorenzo'
-const SERIES_TAGLINE = 'Episodes you won’t find anywhere else.'
-
 type Episode = {
   id: string
-  number: number
+  number?: number
   title: string
+  description?: string
   videoId: string
+  ageRestricted?: boolean
   // TODO(Amanda): once you've made the Ko-fi Digital Download listing
   // for this episode's actual video file, drop the link in here.
   downloadLink?: string
   downloadPrice?: string
 }
 
+type SeriesGroup = {
+  id: string
+  title: string
+  subtitle?: string
+  tagline?: string
+  episodes: Episode[]
+}
+
 // Cloudflare Stream — same account as the rest of the site's hosting.
 const STREAM_CUSTOMER_CODE = 'ppcygtjv41676m0o'
 
-const episodes: Episode[] = [
+const seriesGroups: SeriesGroup[] = [
   {
-    id: 'ep1',
-    number: 1,
-    title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
-    videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
-    downloadLink: 'https://ko-fi.com/s/c1574ec04a',
-    downloadPrice: '$5',
+    id: 'rise-of-an-empire',
+    title: 'Rise of an Empire',
+    subtitle: 'Season 1 — House of Di Lorenzo',
+    tagline: 'Episodes you won’t find anywhere else.',
+    episodes: [
+      {
+        id: 'ep1',
+        number: 1,
+        title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
+        videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
+        downloadLink: 'https://ko-fi.com/s/c1574ec04a',
+        downloadPrice: '$5',
+      },
+    ],
+  },
+  {
+    id: 'house-of-di-lorenzo',
+    title: 'House of Di Lorenzo',
+    episodes: [],
   },
 ]
 
@@ -42,9 +61,14 @@ function streamEmbedSrc(videoId: string) {
 
 export default function Series() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [confirmedIds, setConfirmedIds] = useState<Set<string>>(new Set())
+
+  const confirmAge = (id: string) => {
+    setConfirmedIds((prev) => new Set(prev).add(id))
+  }
 
   useEffect(() => {
-    document.title = `${SERIES_TITLE} — House of Di Lorenzo`
+    document.title = 'The Series — House of Di Lorenzo'
   }, [])
 
   useEffect(() => {
@@ -80,52 +104,98 @@ export default function Series() {
           <img src={crestIcon} alt="" className="mb-8 h-16 w-16 object-contain opacity-95" />
           <p className="eyebrow mb-4">House of Di Lorenzo Productions</p>
           <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
-            {SERIES_TITLE}
+            The Series
           </h1>
-          <p className="mt-3 font-display text-lg text-gold-bright italic sm:text-xl">{SERIES_SEASON}</p>
-          <p className="mt-5 max-w-xl font-body text-lg text-ivory-dim italic">{SERIES_TAGLINE}</p>
+          <p className="mt-5 max-w-xl font-body text-lg text-ivory-dim italic">
+            Two stories. One house.
+          </p>
           <p className="mt-6 text-xs tracking-[0.14em] text-gold-dim uppercase">
             Mature themes · Intended for adult audiences
           </p>
         </div>
       </section>
 
-      <section className="px-6 py-20 sm:px-10">
-        <div className="mx-auto flex max-w-3xl flex-col gap-14">
-          {episodes.map((ep) => (
-            <article key={ep.id} className="reveal is-visible">
-              <p className="eyebrow mb-3">Episode {ep.number}</p>
-              <h2 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">{ep.title}</h2>
-              <ViewCounter slug={`series-${ep.id}`} className="mb-5" />
-              <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
-                <iframe
-                  src={streamEmbedSrc(ep.videoId)}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full border-0"
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                  allowFullScreen
-                  title={ep.title}
-                />
+      {seriesGroups
+        .filter((group) => group.episodes.length > 0)
+        .map((group) => (
+          <section key={group.id} className="px-6 py-20 sm:px-10">
+            <div className="mx-auto flex max-w-3xl flex-col gap-14">
+              <div className="border-b border-ink-line pb-8">
+                <h2 className="font-display text-3xl text-ivory sm:text-4xl">{group.title}</h2>
+                {group.subtitle && (
+                  <p className="mt-2 font-display text-base text-gold-bright italic sm:text-lg">
+                    {group.subtitle}
+                  </p>
+                )}
+                {group.tagline && (
+                  <p className="mt-3 font-body text-ivory-dim italic">{group.tagline}</p>
+                )}
               </div>
 
-              {ep.downloadPrice && (
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-ink px-5 py-4">
-                  <p className="font-body text-sm text-ivory-dim">
-                    Stream it free above, or own the file — yours to keep, offline, no ads.
-                  </p>
-                  <a
-                    href={ep.downloadLink ?? '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-gold shrink-0 whitespace-nowrap"
-                  >
-                    Download — {ep.downloadPrice}
-                  </a>
-                </div>
-              )}
-            </article>
-          ))}
+              {group.episodes.map((ep) => {
+                const needsGate = ep.ageRestricted && !confirmedIds.has(ep.id)
 
+                return (
+                  <article key={ep.id} className="reveal is-visible">
+                    {ep.number && <p className="eyebrow mb-3">Episode {ep.number}</p>}
+                    <h3 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">{ep.title}</h3>
+                    {ep.description && (
+                      <p className="mb-4 font-body text-ivory-dim italic">{ep.description}</p>
+                    )}
+                    <ViewCounter slug={`series-${ep.id}`} className="mb-5" />
+
+                    {needsGate ? (
+                      <div className="flex aspect-video w-full flex-col items-center justify-center gap-5 border border-ink-line bg-ink px-6 text-center">
+                        <p className="eyebrow">18+ Only</p>
+                        <p className="max-w-sm font-body text-sm text-ivory-dim">
+                          This scene contains explicit content. By continuing, you confirm you
+                          are at least 18 years old.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => confirmAge(ep.id)}
+                          className="btn-gold"
+                        >
+                          I am 18+ — Watch
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
+                        <iframe
+                          src={streamEmbedSrc(ep.videoId)}
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full border-0"
+                          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                          allowFullScreen
+                          title={ep.title}
+                        />
+                      </div>
+                    )}
+
+                    {ep.downloadPrice && (
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-ink px-5 py-4">
+                        <p className="font-body text-sm text-ivory-dim">
+                          Stream it free above, or own the file — yours to keep, offline, no ads.
+                        </p>
+                        <a
+                          href={ep.downloadLink ?? '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-gold shrink-0 whitespace-nowrap"
+                        >
+                          Download — {ep.downloadPrice}
+                        </a>
+                      </div>
+                    )}
+                  </article>
+                )
+              })}
+            </div>
+          </section>
+        ))}
+
+      <section className="px-6 pb-20 sm:px-10">
+        <div className="mx-auto max-w-3xl">
           <TipCallout />
         </div>
       </section>
