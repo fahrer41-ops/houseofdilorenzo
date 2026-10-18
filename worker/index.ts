@@ -7,6 +7,7 @@ interface Env {
 // endpoint can't be used as an open counter for arbitrary keys.
 const KNOWN_SLUGS = new Set([
   'series-ep1',
+  'series-amanda-francesco-wedding-night',
   'film-rise-of-an-empire-siege',
   'film-start-of-forever',
   'voices-in-the-void',
