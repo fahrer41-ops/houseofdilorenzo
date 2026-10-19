@@ -1,21 +1,46 @@
-// TODO(Amanda): this gradient wash stands in for the "portrait + duotone wash"
-// hero from Will's reference images. Once he sends a headshot, drop it in as
-// an <img>/<video> behind this same overlay (see Hero.tsx in the main site
-// for the pattern) and this div can go.
+import { useEffect, useRef } from 'react'
+
+const heroPoster = '/hero-video-poster.jpg'
+
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!prefersReducedMotion) {
+      videoRef.current?.play().catch(() => {
+        // Autoplay can be blocked by the browser; the poster frame stands in fine.
+      })
+    }
+  }, [])
+
   return (
     <section
       id="top"
       className="relative flex min-h-screen items-center overflow-hidden"
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(120% 120% at 15% 20%, #ff9a4d 0%, #ff4b1f 32%, #c4132c 58%, #0b0908 85%)',
-        }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-void via-void/10 to-transparent" />
+      <div className="absolute inset-0">
+        <video
+          ref={videoRef}
+          poster={heroPoster}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover object-center"
+        >
+          <source src="/hero-video.webm" type="video/webm" />
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(120% 120% at 15% 20%, rgba(255,154,77,0.35) 0%, rgba(196,19,44,0.45) 45%, rgba(11,9,8,0.75) 85%)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/10 to-transparent" />
+      </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-32 sm:px-10">
         <p
