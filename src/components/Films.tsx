@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import crestIcon from '../assets/crest-icon.png'
+import filmsHeroPoster from '../assets/films-hero-poster.png'
 import TipCallout from './TipCallout'
 import ViewCounter from './ViewCounter'
 
@@ -46,24 +46,27 @@ export default function Films() {
 
   return (
     <div className="min-h-screen bg-void">
-      {/* TODO(Amanda): placeholder hero — no video/poster asset yet. Once you have
-          one, replace this gradient block with the same <video poster={...}>
-          pattern used in Hero.tsx / Series.tsx (full-bleed, object-cover). */}
-      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-ink via-void to-black" />
-        <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40" />
-
-        <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center px-6 text-center">
-          <img src={crestIcon} alt="" className="mb-8 h-16 w-16 object-contain opacity-95" />
-          <p className="eyebrow mb-4">House of Di Lorenzo</p>
-          <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
-            Full-Length <span className="gold-text italic">Films</span>
-          </h1>
-          <p className="mt-5 max-w-xl font-body text-lg text-ivory-dim italic">
-            The complete stories, start to end.
-          </p>
-        </div>
+      {/* TODO(Amanda): placeholder hero — this is the studio credits card, used
+          as a stand-in until the real hero video exists. Once you have one,
+          swap this <img> for the <video poster={...}> pattern used in
+          Hero.tsx / Series.tsx (full-bleed, object-cover). Kept as
+          object-contain here since this image is a wide banner graphic, not
+          footage meant to be cropped. */}
+      <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden bg-black">
+        <img
+          src={filmsHeroPoster}
+          alt="House of Di Lorenzo — directed, created and produced by Amanda Fahrer"
+          className="h-full w-full object-contain"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent" />
       </section>
+
+      <div className="mx-auto max-w-2xl px-6 pt-14 text-center sm:px-10">
+        <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
+          Full-Length <span className="gold-text italic">Films</span>
+        </h1>
+        <p className="mt-5 font-body text-lg text-ivory-dim italic">The complete stories, start to end.</p>
+      </div>
 
       <div className="mx-auto mt-14 flex max-w-3xl flex-col gap-14 px-6 pb-16 sm:px-10">
         {films.length === 0 ? (
