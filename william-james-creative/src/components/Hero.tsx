@@ -32,10 +32,10 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* TODO(Amanda): placeholder pitch — swap once Will sends real copy on
-            what he does and who it's for. */}
+        {/* TODO(Amanda): swap once Will sends his own words on this — pulled
+            from his Behance bio in the meantime. */}
         <p className="reveal is-visible mt-8 max-w-md font-body text-lg text-ivory">
-          Brand, design and art direction — built around ideas that hold up.
+          AI-directed music videos, character art and film — built frame by frame.
         </p>
 
         <div className="reveal is-visible mt-10 flex flex-col gap-4 sm:flex-row">

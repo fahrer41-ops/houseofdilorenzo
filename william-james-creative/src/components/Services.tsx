@@ -1,10 +1,10 @@
-// TODO(Amanda): placeholder service list — common offerings for this kind of
-// creative-portfolio site. Swap for whatever Will actually does.
+// Grounded in his real work (Behance / Darks&MuseAI) — swap only if Will
+// wants these framed differently.
 const SERVICES = [
-  { number: '01', title: 'Brand Identity' },
-  { number: '02', title: 'Web Design' },
-  { number: '03', title: 'Art Direction' },
-  { number: '04', title: 'Content Design' },
+  { number: '01', title: 'AI Music Video Direction' },
+  { number: '02', title: 'Character & Concept Art' },
+  { number: '03', title: 'Film Direction' },
+  { number: '04', title: 'AI Content Strategy' },
 ]
 
 export default function Services() {
