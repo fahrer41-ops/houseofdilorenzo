@@ -45,17 +45,27 @@ export default function Films() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-void px-6 py-16 sm:px-10">
-      <div className="mx-auto max-w-2xl text-center">
-        <img src={crestIcon} alt="" className="mx-auto mb-8 h-16 w-16 object-contain opacity-95" />
-        <p className="eyebrow mb-4">House of Di Lorenzo</p>
-        <h1 className="font-display text-4xl text-ivory sm:text-5xl">
-          Full-Length <span className="gold-text italic">Films</span>
-        </h1>
-        <p className="mt-5 font-body text-ivory-dim">The complete stories, start to end.</p>
-      </div>
+    <div className="min-h-screen bg-void">
+      {/* TODO(Amanda): placeholder hero — no video/poster asset yet. Once you have
+          one, replace this gradient block with the same <video poster={...}>
+          pattern used in Hero.tsx / Series.tsx (full-bleed, object-cover). */}
+      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-ink via-void to-black" />
+        <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40" />
 
-      <div className="mx-auto mt-14 flex max-w-3xl flex-col gap-14">
+        <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center px-6 text-center">
+          <img src={crestIcon} alt="" className="mb-8 h-16 w-16 object-contain opacity-95" />
+          <p className="eyebrow mb-4">House of Di Lorenzo</p>
+          <h1 className="font-display text-4xl leading-[1.1] text-ivory sm:text-5xl md:text-6xl">
+            Full-Length <span className="gold-text italic">Films</span>
+          </h1>
+          <p className="mt-5 max-w-xl font-body text-lg text-ivory-dim italic">
+            The complete stories, start to end.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto mt-14 flex max-w-3xl flex-col gap-14 px-6 pb-16 sm:px-10">
         {films.length === 0 ? (
           <p className="reveal is-visible text-center font-body text-sm text-ivory-dim italic">
             Films coming soon.
@@ -98,7 +108,7 @@ export default function Films() {
         <TipCallout />
       </div>
 
-      <p className="mt-16 text-center font-body text-xs tracking-wide text-ivory-dim/70">
+      <p className="mt-16 px-6 pb-16 text-center font-body text-xs tracking-wide text-ivory-dim/70 sm:px-10">
         <a href="/" className="text-gold underline underline-offset-4">
           Back to House of Di Lorenzo
         </a>
