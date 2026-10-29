@@ -3,13 +3,23 @@ import crestIcon from '../assets/crest-icon.png'
 import bannerPoster from '../assets/series-banner-poster.jpg'
 import TipCallout from './TipCallout'
 import ViewCounter from './ViewCounter'
+import ep1Poster from '../assets/series-hod/ep1-the-start-of-forever.webp'
+import ep2Poster from '../assets/series-hod/ep2-el-capo.webp'
+import ep3Poster from '../assets/series-hod/ep3-non-ancora.webp'
+import ep4Poster from '../assets/series-hod/ep4-mine.webp'
+import ep5Poster from '../assets/series-hod/ep5-live-now.webp'
 
 type Episode = {
   id: string
   number?: number
   title: string
   description?: string
-  videoId: string
+  // Omit videoId for a "Coming Soon" card — just the poster and title show,
+  // no player. Add it once the episode is uploaded to Cloudflare Stream.
+  videoId?: string
+  // Custom poster for a not-yet-uploaded episode (the official poster art).
+  // Once videoId is set, the Stream thumbnail is used instead automatically.
+  poster?: string
   ageRestricted?: boolean
   // TODO(Amanda): once you've made the Ko-fi Digital Download listing
   // for this episode's actual video file, drop the link in here.
@@ -48,7 +58,39 @@ const seriesGroups: SeriesGroup[] = [
   {
     id: 'house-of-di-lorenzo',
     title: 'House of Di Lorenzo',
+    subtitle: 'Season 1',
     episodes: [
+      {
+        id: 'ep1-the-start-of-forever',
+        number: 1,
+        title: 'The Start of Forever',
+        poster: ep1Poster,
+      },
+      {
+        id: 'ep2-el-capo',
+        number: 2,
+        title: 'El Capo',
+        poster: ep2Poster,
+      },
+      {
+        id: 'ep3-non-ancora',
+        number: 3,
+        title: 'Non Ancora',
+        poster: ep3Poster,
+      },
+      {
+        id: 'ep4-mine',
+        number: 4,
+        title: 'Mine',
+        poster: ep4Poster,
+      },
+      {
+        id: 'ep5-live-now',
+        number: 5,
+        title: 'Live Now',
+        poster: ep5Poster,
+      },
+      // TODO(Amanda): Episode 6 "Vuoi Sposarmi?" — add once the poster file lands.
       {
         id: 'amanda-francesco-wedding-night',
         // TODO(Amanda): working title — rename whenever you land on one.
@@ -71,9 +113,17 @@ function streamEmbedSrc(videoId: string) {
 export default function Series() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [confirmedIds, setConfirmedIds] = useState<Set<string>>(new Set())
+  const [expandedByGroup, setExpandedByGroup] = useState<Record<string, string | null>>({})
 
   const confirmAge = (id: string) => {
     setConfirmedIds((prev) => new Set(prev).add(id))
+  }
+
+  const toggleExpanded = (groupId: string, episodeId: string) => {
+    setExpandedByGroup((prev) => ({
+      ...prev,
+      [groupId]: prev[groupId] === episodeId ? null : episodeId,
+    }))
   }
 
   useEffect(() => {
@@ -126,35 +176,91 @@ export default function Series() {
 
       {seriesGroups
         .filter((group) => group.episodes.length > 0)
-        .map((group) => (
-          <section key={group.id} className="px-6 py-20 sm:px-10">
-            <div className="mx-auto flex max-w-3xl flex-col gap-14">
-              <div className="border-b border-ink-line pb-8">
-                <h2 className="font-display text-3xl text-ivory sm:text-4xl">{group.title}</h2>
-                {group.subtitle && (
-                  <p className="mt-2 font-display text-base text-gold-bright italic sm:text-lg">
-                    {group.subtitle}
-                  </p>
-                )}
-                {group.tagline && (
-                  <p className="mt-3 font-body text-ivory-dim italic">{group.tagline}</p>
-                )}
-              </div>
+        .map((group) => {
+          const expandedId = expandedByGroup[group.id] ?? null
+          const expandedEp = group.episodes.find((ep) => ep.id === expandedId)
 
-              {group.episodes.map((ep) => {
-                const needsGate = ep.ageRestricted && !confirmedIds.has(ep.id)
+          return (
+            <section key={group.id} className="px-6 py-20 sm:px-10">
+              <div className="mx-auto flex max-w-5xl flex-col gap-10">
+                <div className="border-b border-ink-line pb-8">
+                  <h2 className="font-display text-3xl text-ivory sm:text-4xl">{group.title}</h2>
+                  {group.subtitle && (
+                    <p className="mt-2 font-display text-base text-gold-bright italic sm:text-lg">
+                      {group.subtitle}
+                    </p>
+                  )}
+                  {group.tagline && (
+                    <p className="mt-3 font-body text-ivory-dim italic">{group.tagline}</p>
+                  )}
+                </div>
 
-                return (
-                  <article key={ep.id} className="reveal is-visible">
-                    {ep.number && <p className="eyebrow mb-3">Episode {ep.number}</p>}
-                    <h3 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">{ep.title}</h3>
-                    {ep.description && (
-                      <p className="mb-4 font-body text-ivory-dim italic">{ep.description}</p>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                  {group.episodes.map((ep) => {
+                    const hasVideo = Boolean(ep.videoId)
+                    const posterSrc = ep.videoId
+                      ? `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${ep.videoId}/thumbnails/thumbnail.jpg?time=&height=600`
+                      : ep.poster
+
+                    return (
+                      <button
+                        key={ep.id}
+                        type="button"
+                        disabled={!hasVideo}
+                        onClick={() => toggleExpanded(group.id, ep.id)}
+                        className={`reveal is-visible group relative aspect-[2/3] overflow-hidden border text-left transition-colors ${
+                          expandedId === ep.id
+                            ? 'border-gold'
+                            : 'border-ink-line hover:border-gold-dim'
+                        } ${hasVideo ? 'cursor-pointer' : 'cursor-default'}`}
+                      >
+                        {posterSrc ? (
+                          <img
+                            src={posterSrc}
+                            alt={ep.title}
+                            className={`h-full w-full object-cover transition-transform duration-500 ${
+                              hasVideo ? 'group-hover:scale-105' : ''
+                            }`}
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-ink" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-void via-void/10 to-transparent" />
+
+                        {!hasVideo && (
+                          <p className="absolute top-2 right-2 bg-void/80 px-2 py-1 text-[0.6rem] tracking-[0.12em] text-gold-dim uppercase">
+                            Coming Soon
+                          </p>
+                        )}
+
+                        <div className="absolute inset-x-0 bottom-0 p-3">
+                          {ep.number && (
+                            <p className="mb-0.5 text-[0.65rem] tracking-[0.14em] text-gold uppercase">
+                              Episode {ep.number}
+                            </p>
+                          )}
+                          <p className="font-display text-sm leading-tight text-ivory sm:text-base">
+                            {ep.title}
+                          </p>
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {expandedEp && (
+                  <article className="reveal is-visible border border-gold-dim bg-ink p-6 sm:p-8">
+                    {expandedEp.number && <p className="eyebrow mb-3">Episode {expandedEp.number}</p>}
+                    <h3 className="mb-2 font-display text-2xl text-ivory sm:text-3xl">
+                      {expandedEp.title}
+                    </h3>
+                    {expandedEp.description && (
+                      <p className="mb-4 font-body text-ivory-dim italic">{expandedEp.description}</p>
                     )}
-                    <ViewCounter slug={`series-${ep.id}`} className="mb-5" />
+                    <ViewCounter slug={`series-${expandedEp.id}`} className="mb-5" />
 
-                    {needsGate ? (
-                      <div className="flex aspect-video w-full flex-col items-center justify-center gap-5 border border-ink-line bg-ink px-6 text-center">
+                    {expandedEp.ageRestricted && !confirmedIds.has(expandedEp.id) ? (
+                      <div className="flex aspect-video w-full flex-col items-center justify-center gap-5 border border-ink-line bg-void px-6 text-center">
                         <p className="eyebrow">18+ Only</p>
                         <p className="max-w-sm font-body text-sm text-ivory-dim">
                           This scene contains explicit content. By continuing, you confirm you
@@ -162,46 +268,46 @@ export default function Series() {
                         </p>
                         <button
                           type="button"
-                          onClick={() => confirmAge(ep.id)}
+                          onClick={() => confirmAge(expandedEp.id)}
                           className="btn-gold"
                         >
                           I am 18+ — Watch
                         </button>
                       </div>
                     ) : (
-                      <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-ink">
+                      <div className="relative aspect-video w-full overflow-hidden border border-ink-line bg-void">
                         <iframe
-                          src={streamEmbedSrc(ep.videoId)}
+                          src={streamEmbedSrc(expandedEp.videoId!)}
                           loading="lazy"
                           className="absolute inset-0 h-full w-full border-0"
                           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
                           allowFullScreen
-                          title={ep.title}
+                          title={expandedEp.title}
                         />
                       </div>
                     )}
 
-                    {ep.downloadPrice && (
-                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-ink px-5 py-4">
+                    {expandedEp.downloadPrice && (
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-ink-line bg-void px-5 py-4">
                         <p className="font-body text-sm text-ivory-dim">
                           Stream it free above, or own the file — yours to keep, offline, no ads.
                         </p>
                         <a
-                          href={ep.downloadLink ?? '#'}
+                          href={expandedEp.downloadLink ?? '#'}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn-gold shrink-0 whitespace-nowrap"
                         >
-                          Download — {ep.downloadPrice}
+                          Download — {expandedEp.downloadPrice}
                         </a>
                       </div>
                     )}
                   </article>
-                )
-              })}
-            </div>
-          </section>
-        ))}
+                )}
+              </div>
+            </section>
+          )
+        })}
 
       <section className="px-6 pb-20 sm:px-10">
         <div className="mx-auto max-w-3xl">
