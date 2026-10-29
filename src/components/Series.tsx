@@ -9,6 +9,8 @@ import ep3Poster from '../assets/series-hod/ep3-non-ancora.webp'
 import ep4Poster from '../assets/series-hod/ep4-mine.webp'
 import ep5Poster from '../assets/series-hod/ep5-live-now.webp'
 import ep6Poster from '../assets/series-hod/ep6-vuoi-sposarmi.webp'
+import weddingPoster from '../assets/series-hod/wedding-di-lorenzo.webp'
+import valkyriesVowPoster from '../assets/series-roae/ep1-valkyries-vow.webp'
 
 type Episode = {
   id: string
@@ -18,8 +20,8 @@ type Episode = {
   // Omit videoId for a "Coming Soon" card — just the poster and title show,
   // no player. Add it once the episode is uploaded to Cloudflare Stream.
   videoId?: string
-  // Custom poster for a not-yet-uploaded episode (the official poster art).
-  // Once videoId is set, the Stream thumbnail is used instead automatically.
+  // Official poster art. Used as the card thumbnail even once videoId is
+  // set — falls back to the Cloudflare Stream auto-thumbnail if omitted.
   poster?: string
   ageRestricted?: boolean
   // TODO(Amanda): once you've made the Ko-fi Digital Download listing
@@ -51,6 +53,7 @@ const seriesGroups: SeriesGroup[] = [
         number: 1,
         title: 'Rise of an Empire: The Valkyrie’s Vow - Episode 1',
         videoId: '3ef0ad11e2d610207d9e2ef3dd004a1d',
+        poster: valkyriesVowPoster,
         downloadLink: 'https://ko-fi.com/s/c1574ec04a',
         downloadPrice: '$5',
       },
@@ -99,10 +102,10 @@ const seriesGroups: SeriesGroup[] = [
       },
       {
         id: 'amanda-francesco-wedding-night',
-        // TODO(Amanda): working title — rename whenever you land on one.
-        title: 'Wedding Night',
+        title: 'Di Lorenzo Wedding',
         description: 'Amanda & Francesco finally found a time alone as Husband and Wife.',
         videoId: 'b0fb88cfe6d4746fa89cc12815e0d07e',
+        poster: weddingPoster,
         ageRestricted: true,
       },
     ],
@@ -204,9 +207,11 @@ export default function Series() {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {group.episodes.map((ep) => {
                     const hasVideo = Boolean(ep.videoId)
-                    const posterSrc = ep.videoId
-                      ? `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${ep.videoId}/thumbnails/thumbnail.jpg?time=&height=600`
-                      : ep.poster
+                    const posterSrc =
+                      ep.poster ??
+                      (ep.videoId
+                        ? `https://customer-${STREAM_CUSTOMER_CODE}.cloudflarestream.com/${ep.videoId}/thumbnails/thumbnail.jpg?time=&height=600`
+                        : undefined)
 
                     return (
                       <button
