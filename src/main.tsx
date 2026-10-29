@@ -8,6 +8,8 @@ import Series from './components/Series.tsx'
 import Films from './components/Films.tsx'
 import Shop from './components/Shop.tsx'
 import VoicesInTheVoid from './components/VoicesInTheVoid.tsx'
+import Blog from './components/Blog.tsx'
+import BlogPost from './components/BlogPost.tsx'
 
 const path = window.location.pathname.replace(/\/+$/, '')
 
@@ -18,9 +20,12 @@ const routes: Record<string, ComponentType> = {
   '/films': Films,
   '/shop': Shop,
   '/voices-in-the-void': VoicesInTheVoid,
+  '/blog': Blog,
 }
 
-const Page = routes[path] ?? App
+const blogSlug = path.startsWith('/blog/') ? path.slice('/blog/'.length) : null
+
+const Page = blogSlug ? () => <BlogPost slug={blogSlug} /> : (routes[path] ?? App)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
