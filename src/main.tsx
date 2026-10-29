@@ -10,6 +10,7 @@ import Shop from './components/Shop.tsx'
 import VoicesInTheVoid from './components/VoicesInTheVoid.tsx'
 import Blog from './components/Blog.tsx'
 import BlogPost from './components/BlogPost.tsx'
+import JsonPromptConverter from './components/JsonPromptConverter.tsx'
 
 const path = window.location.pathname.replace(/\/+$/, '')
 
@@ -21,6 +22,7 @@ const routes: Record<string, ComponentType> = {
   '/shop': Shop,
   '/voices-in-the-void': VoicesInTheVoid,
   '/blog': Blog,
+  '/json-prompt': JsonPromptConverter,
 }
 
 const blogSlug = path.startsWith('/blog/') ? path.slice('/blog/'.length) : null

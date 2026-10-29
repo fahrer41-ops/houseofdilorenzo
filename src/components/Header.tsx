@@ -15,6 +15,7 @@ const TAB_LINKS = [
   { href: '/series', label: 'Series' },
   { href: '/films', label: 'Films' },
   { href: '/blog', label: 'Blog' },
+  { href: '/json-prompt', label: 'Prompt → JSON' },
   { href: '/shop', label: 'Shop' },
   { href: '/voices-in-the-void', label: 'Voices in the Void' },
 ]
