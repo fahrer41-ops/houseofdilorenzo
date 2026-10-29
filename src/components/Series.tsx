@@ -8,6 +8,7 @@ import ep2Poster from '../assets/series-hod/ep2-el-capo.webp'
 import ep3Poster from '../assets/series-hod/ep3-non-ancora.webp'
 import ep4Poster from '../assets/series-hod/ep4-mine.webp'
 import ep5Poster from '../assets/series-hod/ep5-live-now.webp'
+import ep6Poster from '../assets/series-hod/ep6-vuoi-sposarmi.webp'
 
 type Episode = {
   id: string
@@ -90,7 +91,12 @@ const seriesGroups: SeriesGroup[] = [
         title: 'Live Now',
         poster: ep5Poster,
       },
-      // TODO(Amanda): Episode 6 "Vuoi Sposarmi?" — add once the poster file lands.
+      {
+        id: 'ep6-vuoi-sposarmi',
+        number: 6,
+        title: 'Vuoi Sposarmi?',
+        poster: ep6Poster,
+      },
       {
         id: 'amanda-francesco-wedding-night',
         // TODO(Amanda): working title — rename whenever you land on one.
