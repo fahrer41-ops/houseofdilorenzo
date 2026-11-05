@@ -113,6 +113,7 @@ const seriesGroups: SeriesGroup[] = [
       {
         id: 'devotion-beyond-power',
         title: 'Devotion Beyond Power',
+        videoId: 'f09fc97f5f1c8a70662f4b92dab26a31',
         poster: devotionPoster,
       },
     ],
