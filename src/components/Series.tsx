@@ -69,6 +69,7 @@ const seriesGroups: SeriesGroup[] = [
         id: 'ep1-the-start-of-forever',
         number: 1,
         title: 'The Start of Forever',
+        videoId: '0526f8dc07df20311f56903d371b2e37',
         poster: ep1Poster,
       },
       {
