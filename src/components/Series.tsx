@@ -10,6 +10,7 @@ import ep4Poster from '../assets/series-hod/ep4-mine.webp'
 import ep5Poster from '../assets/series-hod/ep5-live-now.webp'
 import ep6Poster from '../assets/series-hod/ep6-vuoi-sposarmi.webp'
 import weddingPoster from '../assets/series-hod/wedding-di-lorenzo.webp'
+import devotionPoster from '../assets/series-hod/devotion-beyond-power.webp'
 import valkyriesVowPoster from '../assets/series-roae/ep1-valkyries-vow.webp'
 
 type Episode = {
@@ -107,6 +108,11 @@ const seriesGroups: SeriesGroup[] = [
         videoId: 'b0fb88cfe6d4746fa89cc12815e0d07e',
         poster: weddingPoster,
         ageRestricted: true,
+      },
+      {
+        id: 'devotion-beyond-power',
+        title: 'Devotion Beyond Power',
+        poster: devotionPoster,
       },
     ],
   },
