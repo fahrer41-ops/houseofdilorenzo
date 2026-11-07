@@ -12,6 +12,7 @@ import ep6Poster from '../assets/series-hod/ep6-vuoi-sposarmi.webp'
 import weddingPoster from '../assets/series-hod/wedding-di-lorenzo.webp'
 import devotionPoster from '../assets/series-hod/devotion-beyond-power.webp'
 import valkyriesVowPoster from '../assets/series-roae/ep1-valkyries-vow.webp'
+import jormungandrPoster from '../assets/series-roae/ep2-jormungandr.webp'
 
 type Episode = {
   id: string
@@ -57,6 +58,12 @@ const seriesGroups: SeriesGroup[] = [
         poster: valkyriesVowPoster,
         downloadLink: 'https://ko-fi.com/s/c1574ec04a',
         downloadPrice: '$5',
+      },
+      {
+        id: 'ep2-jormungandr',
+        number: 2,
+        title: 'Rise of an Empire: Jörmungandr - Episode 2',
+        poster: jormungandrPoster,
       },
     ],
   },
