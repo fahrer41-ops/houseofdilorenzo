@@ -65,6 +65,7 @@ const seriesGroups: SeriesGroup[] = [
         title: 'Rise of an Empire: Jörmungandr - Episode 2',
         videoId: 'e1267c8ab8ae9c286df60a44ac2a09bc',
         poster: jormungandrPoster,
+        ageRestricted: true,
       },
     ],
   },
