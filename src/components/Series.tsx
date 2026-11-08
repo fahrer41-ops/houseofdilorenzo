@@ -63,7 +63,7 @@ const seriesGroups: SeriesGroup[] = [
         id: 'ep2-jormungandr',
         number: 2,
         title: 'Rise of an Empire: Jörmungandr - Episode 2',
-        videoId: 'e1267c8ab8ae9c286df60a44ac2a09bc',
+        videoId: 'cb6679625853cfd559448580043f5150',
         poster: jormungandrPoster,
         ageRestricted: true,
       },
